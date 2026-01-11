@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CLIENT PORTAL - PLALANGAN.NET</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+
+        /* --- EDIT WARNA DI SINI --- */
+        :root {
+            --bg-main: #0f1115;
+            --bg-card: #1a1d24;
+            --bg-input: #252932;
+            --color-primary: #3b82f6;
+            --color-success: #22c55e;
+            --color-danger: #ef4444;
+            --text-main: #ffffff;
+            /* Diubah dari #9cacbb ke #cbd5e1 (Slate-300) agar lebih kontras */
+            --text-dim: #cbd5e1; 
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: var(--bg-main); 
+            color: var(--text-main); 
+            min-height: 100vh; 
+        }
+        
+        .glass-card { 
+            background: var(--bg-card); 
+            border: 1px solid rgba(255,255,255,0.05); 
+            border-radius: 20px; 
+        }
+        
+        .input-client { 
+            background: var(--bg-input); 
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 15px; 
+            padding: 18px; 
+            width: 100%; 
+            color: var(--text-main); 
+            outline: none; 
+            font-weight: 800; 
+        }
+
+        .neon-text { text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+        ::-webkit-scrollbar { display: none; }
+        .loading-spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="p-5 pb-20">
+
+    <div id="login-screen" class="fixed inset-0 bg-[#0f1115] z-[100] flex flex-col items-center justify-center px-8">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-black tracking-tighter">PLALANGAN<span class="text-blue-500">.NET</span></h1>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.4em] mt-2 text-primary">Member Access Portal</p>
+        </div>
+        
+        <div class="w-full max-w-sm space-y-4">
+            <input type="number" id="input-wa" placeholder="MASUKKAN NOMOR WA (628...)" class="input-client text-center">
+            <button onclick="prosesLogin()" id="btn-login" class="w-full bg-blue-600 p-5 rounded-2xl font-black uppercase tracking-tight shadow-xl shadow-blue-900/40 active:scale-95 transition-all text-white">
+                LOGIN
+            </button>
+            <p class="text-[9px] text-center text-gray-400 font-bold uppercase italic tracking-widest">Gunakan nomor yang terdaftar di sistem</p>
+        </div>
+    </div>
+
+    <div id="dashboard" class="hidden max-w-md mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <p class="text-[10px] font-bold text-blue-500 uppercase tracking-widest mb-1">Selamat Datang,</p>
+                <h2 id="user-name" class="text-2xl font-black tracking-tight uppercase leading-none">PELANGGAN</h2>
+            </div>
+            <button onclick="location.reload()" class="w-10 h-10 flex items-center justify-center glass-card text-red-500">🚪</button>
+        </div>
+
+        <div id="card-tunggakan" class="bg-red-500 p-6 rounded-[24px] mb-6 shadow-2xl shadow-red-900/20 hidden">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="text-[10px] font-black text-red-100 uppercase tracking-widest mb-1">Total Belum Dibayar</p>
+                    <h3 id="total-tagihan" class="text-3xl font-black text-white leading-none">Rp0</h3>
+                </div>
+                <div class="bg-white/20 p-3 rounded-xl">💸</div>
+            </div>
+            <button id="btn-bayar-wa" class="w-full bg-white text-red-600 mt-5 p-4 rounded-xl font-black uppercase text-xs shadow-lg">
+                KONFIRMASI PEMBAYARAN
+            </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-8">
+            <div class="glass-card p-5">
+                <p class="text-[8px] font-bold text-gray-300 uppercase mb-2 tracking-widest">Status Akun</p>
+                <span id="user-status" class="px-1 py-1 bg-green-500/10 text-green-500 rounded-full text-[10px] font-black uppercase">AKTIF</span>
+            </div>
+            <div class="glass-card p-5 text-right">
+                <p class="text-[8px] font-bold text-gray-300 uppercase mb-2 tracking-widest">Tagihan/Bln</p>
+                <p id="user-nominal" class="font-black text-blue-400 text-sm">Rp0</p>
+            </div>
+        </div>
+
+        <div id="voucher-section" class="hidden mb-10">
+            <div class="flex items-center gap-2 mb-4 ml-1">
+                <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+                <h3 class="text-[10px] font-black text-gray-300 uppercase tracking-widest italic">Voucher / Kode Aktif Anda</h3>
+            </div>
+            <div id="voucher-render" class="space-y-4">
+                </div>
+        </div>
+
+        <div class="flex gap-4 border-b border-white/5 mb-6">
+            <button class="pb-3 border-b-2 border-blue-500 text-xs font-black uppercase">Riwayat Tagihan Bulanan</button>
+        </div>
+
+        <div id="list-tagihan" class="space-y-3 mb-10">
+            </div>
+
+    </div>
+
+    <div id="loader" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden flex flex-col items-center justify-center">
+        <div class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full loading-spin mb-4"></div>
+        <p class="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">Menyinkronkan Data...</p>
+    </div>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbyE4jl6wP6gFaFDVJ2r5CKokOkFzFMGSx7BMeJbI62EprmVgDA_1gmt6iiKgl0EJmkG/exec"; 
+        const WA_ADMIN = "628xxxxxxxxxx"; // <--- GANTI DENGAN NOMOR WA ANDA
+        let db = {};
+
+        async function prosesLogin() {
+            const waInput = document.getElementById('input-wa').value;
+            if(!waInput) return alert("Mohon masukkan nomor WhatsApp!");
+
+            showLoader(true);
+
+            try {
+                const res = await fetch(`${API_URL}?action=read`);
+                db = await res.json();
+                
+                const user = db.master.find(m => String(m.wa).includes(waInput) || waInput.includes(String(m.wa)));
+                
+                if(user) {
+                    renderDashboard(user);
+                } else {
+                    alert("Maaf, nomor WA Anda tidak terdaftar.");
+                    showLoader(false);
+                }
+            } catch (e) {
+                alert("Gangguan koneksi, coba lagi nanti.");
+                showLoader(false);
+            }
+        }
+
+        function renderDashboard(user) {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            showLoader(false);
+
+            document.getElementById('user-name').innerText = user.nama;
+            document.getElementById('user-nominal').innerText = "Rp" + Number(user.nominal).toLocaleString('id-ID');
+            const st = document.getElementById('user-status');
+            st.innerText = user.aktivasi || 'AKTIF';
+            st.className = `px-3 py-1 rounded-full text-[10px] font-black ${user.aktivasi === 'NONAKTIF' ? 'bg-red-500/10 text-red-500' : 'bg-green-500/10 text-green-500'}`;
+
+            // LOGIKA TAGIHAN
+            const tagihanUser = db.tagihan.filter(t => t.nama.toUpperCase() === user.nama.toUpperCase());
+            const tunggakan = tagihanUser.filter(t => String(t.lunas).toUpperCase() !== "TRUE");
+            const total = tunggakan.reduce((sum, t) => sum + Number(t.jumlah), 0);
+
+            if(total > 0) {
+                document.getElementById('card-tunggakan').classList.remove('hidden');
+                document.getElementById('total-tagihan').innerText = "Rp" + total.toLocaleString('id-ID');
+                const listBulan = tunggakan.map(t => t.bulan).join(', ');
+                const textWA = `Halo Admin, Saya *${user.nama}* mau konfirmasi bayar tagihan bulan *${listBulan}* sebesar *Rp${total.toLocaleString('id-ID')}*.`;
+                document.getElementById('btn-bayar-wa').onclick = () => {
+                    window.open(`https://wa.me/${WA_ADMIN}?text=${encodeURIComponent(textWA)}`, '_blank');
+                };
+            }
+
+            // RENDER LIST RIWAYAT TAGIHAN (Teks Kosong diperterang ke gray-400)
+            let htmlT = "";
+            tagihanUser.reverse().forEach(t => {
+                const isLunas = String(t.lunas).toUpperCase() === "TRUE";
+                htmlT += `
+                <div class="glass-card p-5 flex justify-between items-center border-l-4 ${isLunas ? 'border-green-500' : 'border-red-500'}">
+                    <div>
+                        <p class="font-black text-xs uppercase text-white">${t.bulan} ${t.tahun}</p>
+                        <p class="text-[9px] font-bold uppercase mt-1 ${isLunas ? 'text-green-500' : 'text-red-500'}">${isLunas ? '✓ Lunas' : '✕ Belum Bayar'}</p>
+                    </div>
+                    <p class="font-black text-sm">Rp${Number(t.jumlah).toLocaleString('id-ID')}</p>
+                </div>`;
+            });
+            document.getElementById('list-tagihan').innerHTML = htmlT || "<p class='text-center py-10 text-gray-400 font-bold uppercase text-[10px] tracking-widest'>Belum ada riwayat tagihan</p>";
+
+            // --- RENDER RIWAYAT VOUCHER (Teks Detail diperterang ke gray-300/400) ---
+            const history = db.history.filter(h => h.nama.toUpperCase() === user.nama.toUpperCase()).reverse();
+            if(history.length > 0) {
+                document.getElementById('voucher-section').classList.remove('hidden');
+                let htmlV = "";
+                history.forEach((v, index) => {
+                    htmlV += `
+                    <div class="glass-card p-5 border-l-4 border-blue-500 bg-gradient-to-r from-blue-500/5 to-transparent relative overflow-hidden mb-3">
+                        <div class="flex justify-between items-start mb-4 relative z-10">
+                             <div>
+                                <p class="text-[10px] font-black text-blue-500 uppercase tracking-widest leading-none">${v.durasi || 'PAKET WIFI'}</p>
+                                <p class="text-[8px] text-gray-300 font-bold mt-1 uppercase italic">Device #${index + 1}</p>
+                             </div>
+                             <div class="text-right">
+                                <p class="text-[10px] text-gray-400 font-bold uppercase">Berakhir Pada:</p>
+                                <p class="text-[11px] font-bold text-red-500">${v.tglBerakhir || '-'}</p>
+                             </div>
+                        </div>
+                        <div class="bg-black/40 rounded-xl p-4 border border-white/5 flex flex-col items-center">
+                            <p class="text-3xl font-mono font-black tracking-[0.3em] text-white neon-text">${v.kode}</p>
+                        </div>
+                    </div>`;
+                });
+                document.getElementById('voucher-render').innerHTML = htmlV;
+            }
+        }
+
+        function showLoader(show) {
+            document.getElementById('loader').classList.toggle('hidden', !show);
+        }
+    </script>
+</body>
+</html>

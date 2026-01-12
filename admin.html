@@ -99,9 +99,9 @@
 
     <div class="grid grid-cols-4 gap-2 mb-8">
         <div class="stat-box"><p class="text-[7px] font-bold text-gray-500 mb-1 uppercase text-center">Blm Bayar</p><h2 id="stat-belum" class="text-lg font-black neon-red text-center">0</h2></div>
-        <div class="stat-box"><p class="text-[7px] font-bold text-gray-500 mb-1 uppercase text-center">Masuk</p><h2 id="stat-uang" class="text-[9px] font-black neon-green leading-tight text-center">Rp0</h2></div>
-        <div class="stat-box"><p class="text-[7px] font-bold text-gray-500 mb-1 uppercase text-center">Keluar</p><h2 id="stat-keluar" class="text-[9px] font-black neon-red leading-tight text-center">Rp0</h2></div>
-        <div class="stat-box"><p class="text-[7px] font-bold text-gray-500 mb-1 uppercase text-center">Saldo</p><h2 id="stat-saldo" class="text-[9px] font-black neon-blue leading-tight text-center">Rp0</h2></div>
+        <div class="stat-box"><p class="text-[9px] font-bold text-gray-500 mb-1 uppercase text-center">Masuk</p><h2 id="stat-uang" class="text-[11px] font-black neon-green leading-tight text-center">Rp0</h2></div>
+        <div class="stat-box"><p class="text-[9px] font-bold text-gray-500 mb-1 uppercase text-center">Keluar</p><h2 id="stat-keluar" class="text-[11px] font-black neon-red leading-tight text-center">Rp0</h2></div>
+        <div class="stat-box"><p class="text-[9px] font-bold text-gray-500 mb-1 uppercase text-center">Saldo</p><h2 id="stat-saldo" class="text-[11px] font-black neon-blue leading-tight text-center">Rp0</h2></div>
     </div>
 
 <div class="grid grid-cols-3 gap-3 mb-10">
@@ -123,7 +123,7 @@
     </div>
 
     <div class="search-container mb-4">
-        <input type="text" id="main-search" oninput="liveSearchMain()" placeholder="CARI NAMA PELANGGAN..." class="bg-transparent h-14 outline-none font-extrabold text-xs w-full uppercase">
+        <input type="text" id="main-search" oninput="liveSearchMain()" placeholder="CARI NAMA ..." class="bg-transparent h-14 outline-none font-extrabold text-xs w-full uppercase">
         <span class="text-xl text-gray-500">🔍</span>
     </div>
     <div id="search-results-area" class="space-y-3 mb-10"></div>
@@ -133,16 +133,16 @@
             <h3 id="modal-title" class="text-2xl font-black mb-4 uppercase text-center tracking-tighter">LIST</h3>
             
             <div id="modal-search-box" class="mb-4 hidden-el">
-                <input type="text" id="modal-search-input" placeholder="KETIK NAMA UNTUK MENCARI..." class="input-premium border-blue-500/30 text-center uppercase">
+                <input type="text" id="modal-search-input" placeholder="KETIK NAMA..." class="input-premium border-blue-500/30 text-center uppercase">
             </div>
 
             <div id="list-render"></div>
             <div id="m-tambah" class="hidden-el pt-4">
-    <input type="text" id="new-nama" placeholder="NAMA LENGKAP" class="input-premium uppercase">
-    <input type="number" id="new-nominal" placeholder="NOMINAL RP" class="input-premium">
-    <input type="number" id="new-wa" placeholder="NOMOR WA (62...)" class="input-premium">
+    <input type="text" id="new-nama" placeholder="NAMA" class="input-premium uppercase">
+    <input type="number" id="new-nominal" placeholder="Rp" class="input-premium">
+    <input type="number" id="new-wa" placeholder="WA ( 62...)" class="input-premium">
     <select id="new-status" class="input-premium uppercase text-gray-400">
-        <option value="" disabled selected>STATUS AKTIVASI</option>
+        <option value="" disabled selected>STATUS </option>
         <option value="AKTIF" class="text-white">AKTIF</option>
         <option value="NONAKTIF" class="text-white">NONAKTIF</option>
     </select>
@@ -171,21 +171,22 @@
             <option value="Desember">Desember</option>
         </select>
         <select id="gen-tahun" class="input-premium uppercase text-center w-1/2">
+            <option value="2026">2025</option>
             <option value="2026">2026</option>
             <option value="2027">2027</option>
         </select>
     </div>
-    <button onclick="prosesGenerate()" class="w-full bg-yellow-500 text-black p-5 rounded-2xl font-black uppercase shadow-lg shadow-yellow-900/40">⚡ Jalankan Generate</button>
+    <button onclick="prosesGenerate()" class="w-full bg-yellow-500 text-black p-5 rounded-2xl font-black uppercase shadow-lg shadow-yellow-900/40">⚡ Generate / Buat Tagihan</button>
 </div>
 <div id="m-pengeluaran" class="hidden-el pt-2">
     <div class="space-y-2 mb-6">
         <p class="text-[10px] font-bold text-gray-500 uppercase ml-2 italic text-center">Catat Pengeluaran Baru</p>
         <input type="date" id="ex-tgl" class="input-premium uppercase">
-        <input type="text" id="ex-ket" placeholder="KETERANGAN (CONTOH: LISTRIK)" class="input-premium uppercase">
-        <input type="number" id="ex-jml" placeholder="JUMLAH RP" class="input-premium">
+        <input type="text" id="ex-ket" placeholder="Keterangan" class="input-premium uppercase">
+        <input type="number" id="ex-jml" placeholder="Rp" class="input-premium">
         
         <button onclick="saveExpense()" class="w-full bg-red-600 p-4 rounded-2xl font-black uppercase shadow-lg shadow-red-900/40 text-sm text-white">
-            💾 SIMPAN KE HP
+            💾 SIMPAN
         </button>
     </div>
 
@@ -224,7 +225,7 @@
 
 <div id="m-voucher-input" class="hidden-el pt-4 space-y-4">
     <div class="relative">
-        <input type="text" id="v-search-master" placeholder="CARI NAMA PELANGGAN..." 
+        <input type="text" id="v-search-master" placeholder="CARI NAMA..." 
             class="input-premium border-yellow-500/30 text-center uppercase"
             oninput="searchVoucherMember()">
         <div id="v-results" class="absolute z-50 w-full bg-[#1a1d24] rounded-xl mt-1 max-h-40 overflow-y-auto border border-white/10 hidden"></div>

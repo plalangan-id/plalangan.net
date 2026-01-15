@@ -7,907 +7,860 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0f1115; color: #ffffff; min-height: 100vh; padding-bottom: 50px; }
-        .stat-box { background: linear-gradient(145deg, #1a1d24, #14161b); border-radius: 18px; padding: 12px 5px; text-align: center; border: 1px solid rgba(255,255,255,0.03); }
-        .neon-red { color: #ff3131; text-shadow: 0 0 10px rgba(255, 49, 49, 0.4); }
-        .neon-green { color: #39ff14; text-shadow: 0 0 10px rgba(57, 255, 20, 0.4); }
-        .neon-blue { color: #00d2ff; text-shadow: 0 0 10px rgba(0, 210, 255, 0.4); }
-        
-        .icon-menu { @apply flex flex-col items-center justify-center transition-all duration-300; background: #1a1d24; padding: 15px 5px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.02); }
-        .icon-menu:active { transform: scale(0.9); background: #252932; }
-        .icon-menu span { font-size: 28px; margin-bottom: 5px; }
-        .icon-menu p { font-size: 7.5px; font-weight: 800; color: #ffffffad; letter-spacing: 0.05em; text-transform: uppercase; text-align: center; }
-        
-        .search-container { background: #1a1d24; border-radius: 20px; padding: 2px 20px; width: 100%; display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
-        .modal-overlay { position: fixed; inset: 0; background: rgba(10, 12, 16, 0.98); backdrop-filter: blur(25px); display: none; flex-direction: column; z-index: 1000; padding: 20px; }
-        .input-premium { background: #252932; border-radius: 15px; padding: 15px; width: 100%; color: white; outline: none; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05); font-weight: bold; font-size: 14px; }
-        .btn-back { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #ef4444; color: white; width: 50px; height: 50px; border-radius: 50%; font-size: 20px; display: flex; align-items: center; justify-content: center; z-index: 1100; }
-        .hidden-el { 
-            display: none !important; 
-}
-        /* CSS KHUSUS LOGIN PIN */
-        .btn-pin { 
-            width: 65px; 
-            height: 65px; 
-            border-radius: 50%; 
-            background: #1a1d24; 
-            color: white; 
-            font-size: 20px; 
-            font-weight: 800; 
-            border: 1px solid rgba(255,255,255,0.05); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            transition: all 0.2s; 
-            cursor: pointer;
-        }
-        .btn-pin:active { 
-            background: #2563eb; 
-            transform: scale(0.9); 
-            box-shadow: 0 0 15px rgba(37, 99, 235, 0.4); 
-        }
-        .pin-dot { 
-            width: 15px; 
-            height: 15px; 
-            border-radius: 50%; 
-            border: 2px solid rgba(255,255,255,0.2); 
-            transition: all 0.3s ease; 
-        }
-        /* Class ini akan dipicu oleh JavaScript saat angka ditekan */
-        .pin-dot.active { 
-            background: #3b82f6; 
-            border-color: #3b82f6; 
-            box-shadow: 0 0 10px #3b82f6; 
-        }
+        :root { --bg-dark: #060709; --accent-cyan: #00f2ff; --neon-red: #ff3131; --neon-green: #39ff14; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-dark); color: #ffffff; min-height: 100vh; padding-bottom: 50px; overflow-x: hidden; }
+        .stat-box { background: rgba(255,255,255,0.02); border-radius: 20px; padding: 12px 2px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .neon-text-red { color: var(--neon-red); text-shadow: 0 0 10px rgba(255, 49, 49, 0.4); }
+        .neon-text-green { color: var(--neon-green); text-shadow: 0 0 10px rgba(57, 255, 20, 0.4); }
+        .neon-text-blue { color: var(--accent-cyan); text-shadow: 0 0 10px rgba(0, 242, 255, 0.4); }
+        .icon-menu { @apply flex flex-col items-center justify-center transition-all duration-300; background: transparent; padding: 15px 0; border: none; }
+        .icon-menu:active { transform: scale(0.85); opacity: 0.6; }
+        .icon-menu span { font-size: 42px; margin-bottom: 10px; filter: drop-shadow(0 0 12px rgba(255,255,255,0.1)); display: block; }
+        .icon-menu p { font-size: 8px; font-weight: 800; color: rgba(255,255,255,0.5); letter-spacing: 0.05em; text-transform: uppercase; }
+        .search-container { background: rgba(255,255,255,0.03); border-radius: 18px; padding: 0 20px; border: 1px solid rgba(255,255,255,0.08); }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(4, 5, 7, 0.98); backdrop-filter: blur(20px); display: none; flex-direction: column; z-index: 1000; padding: 25px; }
+        .btn-back { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #ffffff; color: #000; width: 50px; height: 50px; border-radius: 50%; font-size: 20px; display: flex; align-items: center; justify-content: center; z-index: 1100; font-weight: bold; }
+        .router-grid-card { background: rgba(255,255,255,0.03); border-radius: 15px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); }
         ::-webkit-scrollbar { display: none; }
+        .hidden-el { display: none; }
     </style>
 </head>
 <body class="p-6">
-    <div id="login-screen" class="fixed inset-0 bg-slate-950 z-[9999] flex flex-col items-center justify-center px-6">
-        <div class="text-center mb-8">
-            <h1 class="text-2xl font-black text-white tracking-tighter">PLALANGAN<span class="text-blue-500">.NET</span></h1>
-            <p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest mt-1">Security Access System</p>
-        </div>
 
-<div class="flex gap-4 mb-10">
-    <div id="pin-1" class="pin-dot"></div>
-    <div id="pin-2" class="pin-dot"></div>
-    <div id="pin-3" class="pin-dot"></div>
-    <div id="pin-4" class="pin-dot"></div>
+    <div id="login-screen" class="fixed inset-0 bg-[#0f172a] flex flex-col justify-center items-center z-[10000] px-6">
+    <div class="w-full max-w-xs bg-white/5 p-10 rounded-[2.5rem] border border-white/10 shadow-2xl text-center">
+        <div class="mb-6 inline-flex p-4 rounded-3xl bg-cyan-500/10 text-cyan-500 text-3xl">
+            🔒
+        </div>
+        <h1 class="text-white font-black tracking-widest text-lg mb-8 uppercase">Login Admin</h1>
+        
+        <input type="password" id="pass-admin" placeholder="PASSWORD" 
+               class="w-full bg-slate-950 border border-white/10 p-5 rounded-2xl text-center text-white font-black outline-none focus:border-cyan-500 mb-4 tracking-widest">
+        
+        <button onclick="cekLogin()" class="w-full bg-cyan-500 text-black font-black py-4 rounded-2xl uppercase text-xs shadow-lg shadow-cyan-500/20 active:scale-95 transition-all">
+            Unlock Dashboard
+        </button>
+    </div>
 </div>
 
-        <div class="grid grid-cols-3 gap-6">
-            <button onclick="inputPin('1')" class="btn-pin">1</button>
-            <button onclick="inputPin('2')" class="btn-pin">2</button>
-            <button onclick="inputPin('3')" class="btn-pin">3</button>
-            <button onclick="inputPin('4')" class="btn-pin">4</button>
-            <button onclick="inputPin('5')" class="btn-pin">5</button>
-            <button onclick="inputPin('6')" class="btn-pin">6</button>
-            <button onclick="inputPin('7')" class="btn-pin">7</button>
-            <button onclick="inputPin('8')" class="btn-pin">8</button>
-            <button onclick="inputPin('9')" class="btn-pin">9</button>
-            <button onclick="clearPin()" class="text-red-500 font-bold text-xs uppercase">Clear</button>
-            <button onclick="inputPin('0')" class="btn-pin">0</button>
-            <button onclick="checkPin()" class="text-green-500 font-bold text-xs uppercase">Go</button>
+<nav class="p-6 py-8 flex justify-between items-center bg-slate-900/50 sticky top-0 z-50 backdrop-blur-md">
+    <div>
+        <h2 class="font-black text-white tracking-tighter text-2xl uppercase leading-none">
+            PLALANGAN<span class="text-cyan-500">.NET</span>
+        </h2>
+        <p class="text-[8px] text-gray-300 font-bold tracking-[0.4em] uppercase mt-1">Administrator Billing System</p>
+    </div>
+    
+    <button onclick="logout()" class="bg-red-500/10 border border-red-500/30 text-red-500 text-[9px] font-black px-4 py-2 rounded-xl active:scale-90 transition-all uppercase tracking-widest">
+        EXIT
+    </button>
+</nav>
+
+    <div class="grid grid-cols-4 gap-2 mb-10">
+        <div class="stat-box">
+            <p class="text-[9px] font-bold text-gray-300 mb-1 uppercase">Belum Bayar</p>
+            <h2 id="stat-belum" class="text-lg font-black neon-text-red">0</h2>
+        </div>
+        <div class="stat-box">
+            <p class="text-[9px] font-bold text-gray-300 mb-1 uppercase">Masuk</p>
+            <h2 id="stat-uang" class="text-[11px] font-black neon-text-green">Rp0</h2>
+        </div>
+        <div class="stat-box">
+            <p class="text-[9px] font-bold text-gray-300 mb-1 uppercase">Keluar</p>
+            <h2 id="stat-keluar" class="text-[11px] font-black neon-text-red">Rp0</h2>
+        </div>
+        <div class="stat-box">
+            <p class="text-[9px] font-bold text-gray-300 mb-1 uppercase">Saldo</p>
+            <h2 id="stat-saldo" class="text-[11px] font-black neon-text-blue">Rp0</h2>
         </div>
     </div>
 
-    <div class="text-center mb-8 mt-2">
-        <h1 class="text-3xl font-black tracking-tighter uppercase  text-white">PLALANGAN<span class="text-blue-500">.NET</span></h1>
-        <p class="text-[8px] font-bold text-gray-500 uppercase tracking-[0.5em]">Network Management System</p>
-    </div>
-
-    <div class="grid grid-cols-4 gap-2 mb-8">
-        <div class="stat-box"><p class="text-[7px] font-bold text-gray-500 mb-1 uppercase text-center">Blm Bayar</p><h2 id="stat-belum" class="text-lg font-black neon-red text-center">0</h2></div>
-        <div class="stat-box"><p class="text-[9px] font-bold text-gray-500 mb-1 uppercase text-center">Masuk</p><h2 id="stat-uang" class="text-[11px] font-black neon-green leading-tight text-center">Rp0</h2></div>
-        <div class="stat-box"><p class="text-[9px] font-bold text-gray-500 mb-1 uppercase text-center">Keluar</p><h2 id="stat-keluar" class="text-[11px] font-black neon-red leading-tight text-center">Rp0</h2></div>
-        <div class="stat-box"><p class="text-[9px] font-bold text-gray-500 mb-1 uppercase text-center">Saldo</p><h2 id="stat-saldo" class="text-[11px] font-black neon-blue leading-tight text-center">Rp0</h2></div>
-    </div>
-
-<div class="grid grid-cols-3 gap-3 mb-10">
+    <div class="grid grid-cols-3 gap-y-8 gap-x-4 mb-12">
         <button onclick="openM('tagihan', 'all')" class="icon-menu"><span>🧾</span><p>Tagihan</p></button>
         <button onclick="openM('tagihan', 'false')" class="icon-menu"><span>⏳</span><p>Belum</p></button>
         <button onclick="openM('tagihan', 'true')" class="icon-menu"><span>✅</span><p>Lunas</p></button>
-        
         <button onclick="openM('master')" class="icon-menu"><span>👥</span><p>Member</p></button>
         <button onclick="openM('tambah')" class="icon-menu"><span>➕</span><p>Tambah</p></button>
         <button onclick="openM('gen')" class="icon-menu"><span>⚡</span><p>Generate</p></button>
-        
-        <button onclick="openM('voucher-input')" class="icon-menu"><span>🎫</span><p>Voucher</p></button>
-        <button onclick="openM('history_list')" class="icon-menu"><span>📜</span><p>History</p></button>
-        <button onclick="openM('pengeluaran')" class="icon-menu"><span>💸</span><p>Keluar</p></button>
-        
+        <button onclick="openM('voucher')" class="icon-menu"><span>🎫</span><p>Voucher</p></button>
+        <button onclick="openM('history')" class="icon-menu"><span>📜</span><p>History</p></button>
+        <button onclick="openM('router')" class="icon-menu"><span>📡</span><p>Router</p></button>
         <button onclick="openM('rekap')" class="icon-menu"><span>📈</span><p>Rekap</p></button>
-        <button onclick="openM('broadcast')" class="icon-menu"><span>📢</span><p>Broadcast</p></button>
-        <button onclick="prosesLogout()" class="icon-menu text-red-500"><span>🚪</span><p>Logout</p></button>
+        <button onclick="openM('pengeluaran')" class="icon-menu"><span>💸</span><p>Keluar</p></button>
+        <button onclick="renderBroadcast()" class="icon-menu"><span>📢</span><p class="text-cyan-400">Broadcast</p></button>
     </div>
 
-    <div class="search-container mb-4">
-        <input type="text" id="main-search" oninput="liveSearchMain()" placeholder="CARI NAMA ..." class="bg-transparent h-14 outline-none font-extrabold text-xs w-full uppercase">
-        <span class="text-xl text-gray-500">🔍</span>
+    <div class="search-container mb-6 flex items-center">
+        <input type="text" id="main-search" oninput="liveSearchMain()" placeholder="CARI NAMA PELANGGAN..." class="bg-transparent h-14 outline-none font-bold text-[10px] w-full uppercase tracking-widest text-white">
+        <span class="opacity-30">🔍</span>
     </div>
-    <div id="search-results-area" class="space-y-3 mb-10"></div>
+
+    <div id="search-results-area" class="space-y-4 mb-20"></div>
 
     <div id="modal-container" class="modal-overlay">
         <div class="w-full max-w-xl mx-auto overflow-y-auto pb-32">
-            <h3 id="modal-title" class="text-2xl font-black mb-4 uppercase text-center tracking-tighter">LIST</h3>
-            
-            <div id="modal-search-box" class="mb-4 hidden-el">
-                <input type="text" id="modal-search-input" placeholder="KETIK NAMA..." class="input-premium border-blue-500/30 text-center uppercase">
+            <h3 id="modal-title" class="text-2xl font-black mb-6 uppercase text-center tracking-tighter text-cyan-400">LIST DATA</h3>
+            <div id="modal-search-box" class="mb-6 hidden-el">
+                <input type="text" id="modal-search-input" placeholder="SEARCH..." class="w-full bg-white/5 border border-white/10 p-4 rounded-xl text-center uppercase font-bold text-sm outline-none focus:border-cyan-500">
             </div>
-
             <div id="list-render"></div>
-            <div id="m-tambah" class="hidden-el pt-4">
-    <input type="text" id="new-nama" placeholder="NAMA" class="input-premium uppercase">
-    <input type="number" id="new-nominal" placeholder="Rp" class="input-premium">
-    <input type="number" id="new-wa" placeholder="WA ( 62...)" class="input-premium">
-    <select id="new-status" class="input-premium uppercase text-gray-400">
-        <option value="" disabled selected>STATUS </option>
-        <option value="AKTIF" class="text-white">AKTIF</option>
-        <option value="NONAKTIF" class="text-white">NONAKTIF</option>
-    </select>
-    <button onclick="saveNewMember()" class="w-full bg-blue-600 p-5 rounded-2xl font-black uppercase shadow-lg shadow-blue-900/40">Simpan Member</button>
-</div>
-<div id="m-rekap" class="hidden-el pt-2">
-    <p class="text-[10px] font-bold text-gray-500 uppercase mb-4 italic text-center text-white">Laporan Keuangan Bulanan</p>
-    <div id="rekap-bulanan-list" class="space-y-4">
-        </div>
-</div>
-<div id="m-gen" class="hidden-el pt-4">
-    <h4 class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-4 text-center">Periode Tagihan Baru</h4>
-    <div class="flex gap-2 mb-4">
-        <select id="gen-bulan" class="input-premium uppercase text-center w-1/2">
-            <option value="Januari">Januari</option>
-            <option value="Februari">Februari</option>
-            <option value="Maret">Maret</option>
-            <option value="April">April</option>
-            <option value="Mei">Mei</option>
-            <option value="Juni">Juni</option>
-            <option value="Juli">Juli</option>
-            <option value="Agustus">Agustus</option>
-            <option value="September">September</option>
-            <option value="Oktober">Oktober</option>
-            <option value="November">November</option>
-            <option value="Desember">Desember</option>
-        </select>
-        <select id="gen-tahun" class="input-premium uppercase text-center w-1/2">
-            <option value="2026">2025</option>
-            <option value="2026">2026</option>
-            <option value="2027">2027</option>
-        </select>
-    </div>
-    <button onclick="prosesGenerate()" class="w-full bg-yellow-500 text-black p-5 rounded-2xl font-black uppercase shadow-lg shadow-yellow-900/40">⚡ Generate / Buat Tagihan</button>
-</div>
-<div id="m-pengeluaran" class="hidden-el pt-2">
-    <div class="space-y-2 mb-6">
-        <p class="text-[10px] font-bold text-gray-500 uppercase ml-2 italic text-center">Catat Pengeluaran Baru</p>
-        <input type="date" id="ex-tgl" class="input-premium uppercase">
-        <input type="text" id="ex-ket" placeholder="Keterangan" class="input-premium uppercase">
-        <input type="number" id="ex-jml" placeholder="Rp" class="input-premium">
-        
-        <button onclick="saveExpense()" class="w-full bg-red-600 p-4 rounded-2xl font-black uppercase shadow-lg shadow-red-900/40 text-sm text-white">
-            💾 SIMPAN
-        </button>
+        </div> 
+        <button onclick="closeM()" class="btn-back">✕</button>
     </div>
 
-    <div class="border-t border-white/10 pt-4">
-        <div class="overflow-x-auto">
-            <table class="w-full text-[9px] border-collapse">
+<script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbwWdxb6uOhajSa1F3RySIFL-CpzvBWinbTpwQ9GiNKM5gY826gn58b5Jv0Bz17zSDli5Q/exec"; 
+    let dataMaster = [], dataTagihan = [], dataHistory = [], dataRouter = [];
+
+    async function loadData() {
+        try {
+            const response = await fetch(`${API_URL}?action=read`);
+            const json = await response.json();
+            dataMaster = json.master || [];
+            dataTagihan = json.tagihan || [];
+            dataHistory = json.history || [];
+            dataRouter = json.router || [];
+            updateDashboardStats();
+        } catch (err) { console.error("Gagal sinkron:", err); }
+    }
+
+    // --- MODAL SYSTEM ---
+    function openM(type, filter = 'all') {
+        const modal = document.getElementById('modal-container');
+        modal.style.display = 'flex';
+        document.getElementById('modal-title').innerText = type.toUpperCase().replace('_', ' ');
+        document.getElementById('modal-search-box').classList.add('hidden-el');
+        document.getElementById('list-render').innerHTML = "";
+
+        if(type === 'tambah') { renderFormTambah(); return; }
+        if(type === 'gen') { renderFormGenerate(); return; }
+        if(type === 'pengeluaran') { renderPengeluaran(); return; }
+        if(type === 'rekap') { renderRekap(); return; }
+        if(type === 'voucher') { renderVoucher(); return; }
+        if(type === 'history') { renderHistory(); return; }
+        if(type === 'tambah_router') { renderFormRouter(); return; }
+
+        if(['tagihan', 'master', 'router'].includes(type)) {
+            document.getElementById('modal-search-box').classList.remove('hidden-el');
+            const searchInput = document.getElementById('modal-search-input');
+            searchInput.value = "";
+            searchInput.oninput = (e) => {
+                const key = e.target.value.toUpperCase();
+                if(type === 'tagihan') renderTagihan(filter, key);
+                if(type === 'master') renderMaster(key);
+                if(type === 'router') renderRouter(key);
+            };
+        }
+
+        if(type === 'tagihan') renderTagihan(filter, "");
+        if(type === 'master') renderMaster("");
+        if(type === 'router') {
+            let btnTambah = `<button onclick="openM('tambah_router')" class="w-full bg-cyan-500/20 border border-cyan-500/50 text-cyan-400 font-bold py-3 rounded-xl mb-4 text-[10px] uppercase">+ TAMBAH ROUTER BARU</button>`;
+            document.getElementById('list-render').innerHTML = btnTambah + `<div id="router-table-area"></div>`;
+            renderRouter("");
+        }
+    }
+
+    // --- RENDER MASTER (PELANGGAN) DENGAN FITUR EDIT ---
+    function renderMaster(key) {
+        const filtered = dataMaster.filter(m => (m.nama || "").toUpperCase().includes(key));
+        let html = "";
+        filtered.forEach(m => {
+            // Klik div untuk EDIT
+            html += `
+            <div onclick="openEditMember('${m.id}')" class="bg-white/5 p-5 rounded-3xl border-l-8 border-cyan-500 mb-4 shadow-lg shadow-cyan-500/5 cursor-pointer hover:bg-white/10 transition-all">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="font-bold text-sm text-white uppercase">${m.nama}</p>
+                        <p class="text-[9px] text-gray-500 font-bold uppercase tracking-wider">WA: ${m.wa} | ID: ${m.id}</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-cyan-400 font-black text-xs">Rp${Number(m.nominal).toLocaleString()}</p>
+                        <p class="text-[7px] text-gray-600 font-bold uppercase">KLIK UNTUK EDIT</p>
+                    </div>
+                </div>
+            </div>`;
+        });
+        document.getElementById('list-render').innerHTML = html || "<p class='text-center opacity-30 uppercase font-bold py-10 text-[10px]'>DATA TIDAK ADA</p>";
+    }
+
+    // --- RENDER ROUTER DENGAN FITUR EDIT ---
+    function renderRouter(key) {
+        const filtered = dataRouter.filter(r => 
+            (r.lokasi || "").toUpperCase().includes(key) || 
+            (r.ssid || "").toUpperCase().includes(key)
+        );
+
+        if (filtered.length === 0) {
+            document.getElementById('router-table-area').innerHTML = "<p class='text-center py-20 opacity-30 uppercase font-bold tracking-widest text-[10px]'>ROUTER TIDAK DITEMUKAN</p>";
+            return;
+        }
+
+        let html = `
+        <div class="overflow-x-auto -mx-2">
+            <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="text-gray-500 border-b border-white/10 uppercase italic">
-                        <th class="text-left py-2 px-1">Tgl</th>
-                        <th class="text-left py-2">Keterangan</th>
-                        <th class="text-right py-2">Jumlah</th>
-                        <th class="text-center py-2 px-1">#</th>
+                    <tr class="border-b border-white/10">
+                        <th class="p-3 text-[8px] font-black text-cyan-400 uppercase">LOKASI / SSID</th>
+                        <th class="p-3 text-[8px] font-black text-cyan-400 uppercase">IP & MAC</th>
+                        <th class="p-3 text-[8px] font-black text-cyan-400 uppercase text-right">AKSI</th>
                     </tr>
                 </thead>
-                <tbody id="rekap-list" class="divide-y divide-white/5 text-white">
-                    </tbody>
+                <tbody class="divide-y divide-white/5">`;
+
+        filtered.forEach(r => {
+            html += `
+            <tr class="hover:bg-white/5 transition-colors">
+                <td class="p-3">
+                  <p class="text-[10px] text-cyan-400 font-bold uppercase mt-1">📶 ${r.ssid || '-'}</p>
+                    <p class="text-[8px] font-bold text-white uppercase leading-tight">${r.lokasi || 'TANPA NAMA'}</p>
+                </td>
+                <td class="p-3">
+                    <p class="text-[9px] font-mono text-gray-300">${r.ip || '-'}</p>
+                    <p class="text-[10px] font-mono text-gray-500 uppercase">${r.mac || '-'}</p>
+                </td>
+                <td class="p-3 text-right">
+                    <button onclick="openEditRouter('${r.mac}')" 
+                        class="bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-[8px] font-bold px-3 py-2 rounded-lg uppercase">
+                        EDIT
+                    </button>
+                </td>
+            </tr>`;
+        });
+
+        html += `</tbody></table></div>`;
+        document.getElementById('router-table-area').innerHTML = html;
+    }
+
+    // --- FUNGSI OPEN FORM EDIT PELANGGAN ---
+    function openEditMember(id) {
+        const m = dataMaster.find(x => x.id.toString() === id.toString());
+        if(!m) return;
+        document.getElementById('modal-title').innerText = "EDIT PELANGGAN";
+        document.getElementById('modal-search-box').classList.add('hidden-el');
+        document.getElementById('list-render').innerHTML = `
+        <div class="space-y-4 p-2 pb-10 animate-in fade-in duration-300">
+            <div class="bg-cyan-500/5 p-4 rounded-2xl border border-cyan-500/10 mb-2">
+                <p class="text-[10px] font-black text-cyan-500 uppercase">ID PELANGGAN: ${m.id}</p>
+            </div>
+            <input type="hidden" id="ed-id" value="${m.id}">
+            <div class="space-y-1">
+                <label class="text-[8px] font-bold text-gray-500 ml-2 uppercase">Nama Lengkap</label>
+                <input type="text" id="ed-nama" value="${m.nama}" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold uppercase focus:border-cyan-500 outline-none">
+            </div>
+            <div class="space-y-1">
+                <label class="text-[8px] font-bold text-gray-500 ml-2 uppercase">Nomor WhatsApp</label>
+                <input type="number" id="ed-wa" value="${m.wa}" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold focus:border-cyan-500 outline-none">
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="space-y-1">
+                    <label class="text-[8px] font-bold text-gray-500 ml-2 uppercase">Nominal</label>
+                    <input type="number" id="ed-nominal" value="${m.nominal}" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold focus:border-cyan-500 outline-none">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[8px] font-bold text-gray-500 ml-2 uppercase">Tgl Aktivasi</label>
+                    <input type="text" id="ed-aktivasi" value="${m.aktivasi}" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold focus:border-cyan-500 outline-none">
+                </div>
+            </div>
+            
+            <button onclick="prosesSimpanEdit('member')" class="w-full bg-cyan-500 text-black font-black py-5 rounded-2xl uppercase mt-4 shadow-lg shadow-cyan-500/20">💾 SIMPAN PERUBAHAN</button>
+            
+            <div class="pt-10">
+                <button onclick="hapusDataSistem('pelanggan', '${m.id}')" class="w-full border border-red-500/50 text-red-500 font-bold py-4 rounded-2xl uppercase text-[10px] hover:bg-red-500/10 transition-all">🗑️ HAPUS PELANGGAN PERMANEN</button>
+            </div>
+        </div>`;
+    }
+
+    // --- FUNGSI OPEN FORM EDIT ROUTER ---
+    function openEditRouter(mac) {
+        const r = dataRouter.find(x => x.mac === mac);
+        if(!r) return;
+        document.getElementById('modal-title').innerText = "EDIT ROUTER";
+        document.getElementById('modal-search-box').classList.add('hidden-el');
+        document.getElementById('list-render').innerHTML = `
+        <div class="space-y-4 p-2 pb-10 animate-in fade-in duration-300">
+            <div class="bg-cyan-500/5 p-4 rounded-2xl border border-cyan-500/10 mb-2">
+                <p class="text-[10px] font-black text-cyan-500 uppercase">MAC ADDRESS: ${r.mac}</p>
+            </div>
+            <input type="hidden" id="er-mac" value="${r.mac}">
+            <div class="space-y-1">
+                <label class="text-[8px] font-bold text-gray-500 ml-2 uppercase">Lokasi / Nama Router</label>
+                <input type="text" id="er-lokasi" value="${r.lokasi}" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold uppercase focus:border-cyan-500 outline-none">
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="space-y-1">
+                    <label class="text-[8px] font-bold text-gray-500 ml-2 uppercase">SSID</label>
+                    <input type="text" id="er-ssid" value="${r.ssid}" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold focus:border-cyan-500 outline-none">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-[8px] font-bold text-gray-500 ml-2 uppercase">Password</label>
+                    <input type="text" id="er-pass" value="${r.pass}" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold focus:border-cyan-500 outline-none">
+                </div>
+            </div>
+            <div class="space-y-1">
+                <label class="text-[8px] font-bold text-gray-500 ml-2 uppercase">IP Address</label>
+                <input type="text" id="er-ip" value="${r.ip}" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold focus:border-cyan-500 outline-none">
+            </div>
+            <div class="space-y-1">
+                <label class="text-[8px] font-bold text-gray-500 ml-2 uppercase">Catatan Tambahan</label>
+                <textarea id="er-catatan" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold h-24 focus:border-cyan-500 outline-none">${r.catatan || ''}</textarea>
+            </div>
+            
+            <button onclick="prosesSimpanEdit('router')" class="w-full bg-cyan-500 text-black font-black py-5 rounded-2xl uppercase mt-4">💾 UPDATE INFO ROUTER</button>
+            
+            <div class="pt-10">
+                <button onclick="hapusDataSistem('router', '${r.mac}')" class="w-full border border-red-500/50 text-red-500 font-bold py-4 rounded-2xl uppercase text-[10px] hover:bg-red-500/10 transition-all">🗑️ HAPUS ROUTER PERMANEN</button>
+            </div>
+        </div>`;
+    }
+
+    // --- LOGIKA KIRIM EDIT KE GS ---
+    async function prosesSimpanEdit(type) {
+        let payload = { action: type === 'member' ? "edit_member" : "edit_router" };
+        if(type === 'member') {
+            payload.id = document.getElementById('ed-id').value;
+            payload.nama = document.getElementById('ed-nama').value;
+            payload.wa = document.getElementById('ed-wa').value;
+            payload.nominal = document.getElementById('ed-nominal').value;
+            payload.aktivasi = document.getElementById('ed-aktivasi').value;
+        } else {
+            payload.mac = document.getElementById('er-mac').value;
+            payload.ip = document.getElementById('er-ip').value;
+            payload.ssid = document.getElementById('er-ssid').value;
+            payload.pass = document.getElementById('er-pass').value;
+            payload.lokasi = document.getElementById('er-lokasi').value;
+            payload.catatan = document.getElementById('er-catatan').value;
+        }
+
+        document.getElementById('list-render').innerHTML = "<p class='text-center py-10 animate-pulse text-cyan-400 font-bold uppercase text-xs'>Menyimpan Perubahan...</p>";
+        try {
+            const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
+            const result = await res.json();
+            if(result.status === "success") { 
+                alert("DATA BERHASIL DIUPDATE!"); 
+                await loadData(); 
+                closeM(); 
+            }
+        } catch (e) { alert("Gagal Update! Cek Koneksi."); }
+    }
+
+    // --- LOGIKA HAPUS DATA ---
+    async function hapusDataSistem(sheetName, id) {
+        if(!confirm(`YAKIN HAPUS DATA INI DARI ${sheetName.toUpperCase()}?`)) return;
+        document.getElementById('list-render').innerHTML = "<p class='text-center py-10 animate-pulse text-red-500 font-bold uppercase text-xs'>Menghapus Data...</p>";
+        try {
+            const res = await fetch(API_URL, { 
+                method: "POST", 
+                body: JSON.stringify({ action: "delete_data", sheet: sheetName, targetId: id }) 
+            });
+            const result = await res.json();
+            if(result.status === "success") { 
+                alert("DATA TERHAPUS!"); 
+                await loadData(); 
+                closeM(); 
+            }
+        } catch (e) { alert("Gagal Hapus!"); }
+    }
+
+    // --- REMAINDER FUNCTIONS (Sama seperti sebelumnya) ---
+
+    async function simpanMemberBaru() {
+        const data = { action: "add_member", id: document.getElementById('in-id').value, nama: document.getElementById('in-nama').value, wa: document.getElementById('in-wa').value, nominal: document.getElementById('in-nominal').value, aktivasi: document.getElementById('in-aktivasi').value };
+        if(!data.id || !data.nama) return alert("Isi ID dan Nama!");
+        document.getElementById('list-render').innerHTML = "<p class='text-center py-10 animate-pulse text-cyan-400 text-xs uppercase font-bold'>SAVING...</p>";
+        try {
+            const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
+            const result = await res.json();
+            if(result.status === "success") { alert("BERHASIL!"); await loadData(); closeM(); }
+        } catch (e) { alert("Error simpan data!"); }
+    }
+
+    async function prosesGenerateMassal() {
+        const data = { action: "generate_massal", bulan: document.getElementById('gen-bulan').value, tahun: document.getElementById('gen-tahun').value };
+        if(!confirm(`Generate tagihan ${data.bulan} ${data.tahun}?`)) return;
+        document.getElementById('list-render').innerHTML = "<p class='text-center py-20 animate-pulse text-cyan-400 text-xs uppercase font-bold'>GENERATING...</p>";
+        try {
+            const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
+            const result = await res.json();
+            if(result.status === "success") { alert(result.message); await loadData(); closeM(); }
+        } catch (e) { alert("Error generate!"); }
+    }
+
+    async function bayarTagihan(id, nama) {
+        if(!confirm(`Terima pembayaran dari ${nama}?`)) return;
+        document.getElementById('list-render').innerHTML = "<p class='text-center py-10 text-cyan-400 animate-bounce text-xs uppercase font-bold'>UPDATING...</p>";
+        try {
+            const res = await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "pay", id: id }) });
+            const result = await res.json();
+            if(result.status === "success") { alert("SUKSES!"); await loadData(); closeM(); }
+        } catch (e) { alert("Gagal koneksi!"); }
+    }
+
+    function renderFormTambah() {
+        document.getElementById('list-render').innerHTML = `<div class="space-y-5 p-2 pb-10"><input type="text" id="in-id" placeholder="ID (CONTOH: P001)" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 uppercase font-bold text-sm text-white"><input type="text" id="in-nama" placeholder="NAMA LENGKAP" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 uppercase font-bold text-sm text-white"><input type="number" id="in-wa" placeholder="WHATSAPP (628...)" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white"><input type="number" id="in-nominal" placeholder="NOMINAL TAGIHAN" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white"><input type="text" id="in-aktivasi" placeholder="TGL AKTIVASI" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white"><button onclick="simpanMemberBaru()" class="w-full bg-cyan-500 text-black font-black py-5 rounded-2xl shadow-lg shadow-cyan-500/30 uppercase mt-4">SIMPAN DATA</button></div>`;
+    }
+
+function renderFormGenerate() {
+        const listBulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+        const d = new Date();
+        
+        // Tampilan tetap sama dengan kode Abang, hanya tombolnya saya arahkan ke logika baru
+        document.getElementById('list-render').innerHTML = `
+        <div class="space-y-6 p-2 pb-10">
+            <div class="bg-white/5 p-4 rounded-2xl border border-white/10 mb-2">
+                <p class="text-[9px] text-gray-500 uppercase font-bold">Total Antrean Nama</p>
+                <p class="text-lg font-black text-white">${dataMaster.length} Member</p>
+            </div>
+            <select id="gen-bulan" class="w-full bg-white/10 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white">
+                ${listBulan.map(b => `<option value="${b}" ${b === listBulan[d.getMonth()] ? 'selected' : ''} class="bg-slate-900">${b}</option>`).join('')}
+            </select>
+            <input type="number" id="gen-tahun" value="${d.getFullYear()}" class="w-full bg-white/10 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white">
+            <button onclick="prosesGenerateMassalNama()" class="w-full bg-cyan-500 text-black font-black py-5 rounded-2xl uppercase mt-4 shadow-lg shadow-cyan-500/30">MULAI GENERATE</button>
+        </div>`;
+    }
+
+    // Eksekusi Generate (Logika Nama)
+    async function prosesGenerateMassalNama() {
+        const bln = document.getElementById('gen-bulan').value;
+        const thn = document.getElementById('gen-tahun').value;
+        if(!confirm(`Generate tagihan periode ${bln} ${thn} untuk SEMUA NAMA?`)) return;
+
+        document.getElementById('list-render').innerHTML = "<p class='text-center py-20 animate-pulse text-cyan-400 text-xs uppercase font-bold'>GENERATING BY NAME...</p>";
+        
+        try {
+            const res = await fetch(API_URL, { 
+                method: "POST", 
+                body: JSON.stringify({ 
+                    action: "generate", 
+                    bulan: bln, 
+                    tahun: thn,
+                    checkBy: "nama" // Kunci agar GS cek nama, bukan ID
+                }) 
+            });
+            const result = await res.json();
+            alert("BERHASIL: " + result.message);
+            await loadData(); 
+            closeM();
+        } catch (e) { 
+            alert("Error generate!"); 
+            renderFormGenerate(); 
+        }
+    }
+
+    function renderTagihan(filter, key) {
+        let list = dataTagihan;
+        if(filter === 'false') list = dataTagihan.filter(d => String(d.lunas).toUpperCase() !== "TRUE");
+        if(filter === 'true') list = dataTagihan.filter(d => String(d.lunas).toUpperCase() === "TRUE");
+        const filtered = list.filter(d => (d.nama || "").toUpperCase().includes(key));
+        let html = "";
+        filtered.forEach(d => {
+            const isLunas = String(d.lunas).toUpperCase() === "TRUE";
+            html += `<div onclick="bayarTagihan('${d.id}', '${d.nama}')" class="bg-white/5 p-5 rounded-3xl border-l-8 ${isLunas ? 'border-green-500' : 'border-red-500'} flex justify-between items-center mb-4 cursor-pointer hover:bg-white/10 transition-all"><div><p class="font-bold text-sm text-white uppercase">${d.nama}</p><p class="text-[9px] text-gray-500 font-bold uppercase">${d.bulan} ${d.tahun}</p></div><div class="text-right"><p class="font-black text-sm ${isLunas ? 'text-green-400' : 'text-red-400'}">Rp${Number(d.jumlah).toLocaleString()}</p><p class="text-[8px] font-bold opacity-40 uppercase">${isLunas ? 'LUNAS' : 'BELUM BAYAR'}</p></div></div>`;
+        });
+        document.getElementById('list-render').innerHTML = html || "<p class='text-center opacity-30 uppercase font-bold py-10 text-[10px]'>DATA KOSONG</p>";
+    }
+
+    function liveSearchMain() {
+        const key = document.getElementById('main-search').value.toUpperCase();
+        const area = document.getElementById('search-results-area');
+        if (!key) { area.innerHTML = ""; return; }
+        const filtered = dataTagihan.filter(d => (d.nama || "").toUpperCase().includes(key));
+        let html = `<p class="text-[10px] font-bold opacity-50 mb-2 uppercase tracking-widest">Hasil Pencarian:</p>`;
+        filtered.forEach(d => {
+            const isLunas = String(d.lunas).toUpperCase() === "TRUE";
+            html += `<div onclick="bayarTagihan('${d.id}', '${d.nama}')" class="bg-white/5 p-4 rounded-2xl border-l-4 ${isLunas ? 'border-green-500' : 'border-red-500'} flex justify-between items-center mb-2 cursor-pointer"><div><p class="text-xs font-bold text-white uppercase">${d.nama}</p><p class="text-[8px] opacity-50 uppercase">${d.bulan} ${d.tahun}</p></div><p class="text-xs font-black ${isLunas ? 'text-green-400' : 'text-red-400'}">Rp${Number(d.jumlah).toLocaleString()}</p></div>`;
+        });
+        area.innerHTML = html || "<p class='text-xs opacity-30 uppercase font-bold py-4'>TIDAK DITEMUKAN</p>";
+    }
+
+    function renderFormRouter() {
+        document.getElementById('list-render').innerHTML = `
+        <div class="space-y-4 p-2 pb-10">
+            <p class="text-[9px] font-bold text-gray-500 uppercase">Informasi Utama</p>
+            <input type="text" id="r-lokasi" placeholder="NAMA LOKASI (CONTOH: LANTAI 2)" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 uppercase font-bold text-sm text-white">
+            <input type="text" id="r-ssid" placeholder="SSID / NAMA WIFI" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white">
+            <input type="text" id="r-pass" placeholder="PASSWORD WIFI" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white">
+            <p class="text-[9px] font-bold text-gray-500 uppercase mt-4">Informasi Teknis</p>
+            <div class="grid grid-cols-2 gap-3">
+                <input type="text" id="r-ip" placeholder="IP ADDRESS" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-xs text-white">
+                <input type="text" id="r-mac" placeholder="MAC ADDRESS" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-xs text-white">
+            </div>
+            <textarea id="r-catatan" placeholder="CATATAN (MISAL: MERK TPLINK)" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white h-24"></textarea>
+            <button onclick="simpanRouterBaru()" class="w-full bg-cyan-500 text-black font-black py-5 rounded-2xl shadow-lg shadow-cyan-500/30 uppercase mt-4">💾 SIMPAN ROUTER</button>
+        </div>`;
+    }
+
+    async function simpanRouterBaru() {
+        const data = { 
+            action: "add_router", 
+            mac: document.getElementById('r-mac').value,
+            ip: document.getElementById('r-ip').value,
+            ssid: document.getElementById('r-ssid').value,
+            pass: document.getElementById('r-pass').value,
+            lokasi: document.getElementById('r-lokasi').value,
+            catatan: document.getElementById('r-catatan').value
+        };
+        if(!data.lokasi || !data.ssid) return alert("Isi Lokasi dan SSID!");
+        document.getElementById('list-render').innerHTML = "<p class='text-center py-10 animate-pulse text-cyan-400 uppercase font-bold text-xs'>Menyimpan ke Sistem...</p>";
+        try {
+            const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(data) });
+            const result = await res.json();
+            if(result.status === "success") { 
+                alert("ROUTER BERHASIL DITAMBAH!"); 
+                await loadData(); 
+                openM('router'); 
+            }
+        } catch (e) { alert("Gagal simpan router!"); openM('tambah_router'); }
+    }
+
+    // --- LOGIKA VOUCHER, HISTORY, PENGELUARAN DLL ---
+
+    function renderVoucher() {
+        let html = `<div class="space-y-6 p-2 pb-10"><div class="space-y-2"><p class="text-[9px] font-bold text-cyan-400 uppercase tracking-widest">1. Cari Nama Pelanggan</p><div class="relative"><input type="text" id="v-search-member" oninput="searchMemberForVoucher()" placeholder="KETIK NAMA..." class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 text-white font-bold uppercase text-xs focus:border-cyan-500 outline-none"><div id="v-member-results" class="absolute z-50 w-full bg-slate-900 border border-white/10 rounded-xl mt-1 hidden overflow-y-auto max-h-40 shadow-2xl"></div></div><div id="v-selected-info" class="hidden-el bg-cyan-500/10 p-4 rounded-xl border border-cyan-500/20"><p id="v-disp-nama" class="text-xs font-black text-white uppercase"></p><p id="v-disp-wa" class="text-[10px] text-cyan-400 font-bold"></p><input type="hidden" id="v-target-wa"><input type="hidden" id="v-target-nama"></div></div><div class="space-y-2"><p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">2. Pilih Paket</p><div class="grid grid-cols-2 gap-3"><button onclick="setPaketVoucher('1 BULAN')" id="btn-v-bulan" class="p-4 rounded-2xl border-2 border-cyan-500/50 bg-cyan-500/10 text-cyan-400 font-bold text-[10px] uppercase">1 BULAN</button><button onclick="setPaketVoucher('MEMBER')" id="btn-v-member" class="p-4 rounded-2xl border-2 border-white/5 bg-white/5 text-gray-400 font-bold text-[10px] uppercase">MEMBER</button></div></div><input type="hidden" id="v-tipe" value="1 BULAN"><div id="area-v-bulan" class="space-y-2"><p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">3. Input Kode Voucher</p><input type="text" id="v-kode-single" placeholder="KODE VOUCHER / SN" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 text-white font-bold uppercase text-xs focus:border-cyan-500 outline-none"></div><div id="area-v-member" class="hidden-el space-y-2"><p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">3. Input Akses Member</p><div class="grid grid-cols-2 gap-3"><input type="text" id="v-user" placeholder="USER" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 text-white font-bold uppercase text-xs focus:border-cyan-500 outline-none"><input type="text" id="v-pass" placeholder="PASS" class="w-full bg-white/5 p-5 rounded-2xl border border-white/10 text-white font-bold uppercase text-xs focus:border-cyan-500 outline-none"></div></div><button onclick="kirimVoucherWA()" class="w-full bg-green-500 text-black font-black py-5 rounded-2xl shadow-lg shadow-green-500/30 uppercase mt-4 flex items-center justify-center gap-2"><span>🚀</span> KIRIM & SIMPAN</button></div>`;
+        document.getElementById('list-render').innerHTML = html;
+    }
+
+    function searchMemberForVoucher() {
+        const key = document.getElementById('v-search-member').value.toUpperCase();
+        const resDiv = document.getElementById('v-member-results');
+        if (key.length < 1) { resDiv.classList.add('hidden'); return; }
+        const filtered = dataMaster.filter(m => (m.nama || "").toUpperCase().includes(key));
+        if (filtered.length > 0) {
+            resDiv.classList.remove('hidden');
+            resDiv.innerHTML = filtered.map(m => `<div onclick="selectMemberVoucher('${m.nama}', '${m.wa}')" class="p-4 border-b border-white/5 hover:bg-white/10 cursor-pointer"><p class="text-xs font-bold text-white uppercase">${m.nama}</p><p class="text-[9px] text-gray-500">${m.wa}</p></div>`).join('');
+        } else { resDiv.innerHTML = `<p class="p-4 text-[10px] text-gray-500 uppercase">Tidak ditemukan</p>`; }
+    }
+
+    function selectMemberVoucher(nama, wa) {
+        document.getElementById('v-target-nama').value = nama;
+        document.getElementById('v-target-wa').value = wa;
+        document.getElementById('v-disp-nama').innerText = nama;
+        document.getElementById('v-disp-wa').innerText = "WA: " + wa;
+        document.getElementById('v-selected-info').classList.remove('hidden-el');
+        document.getElementById('v-member-results').classList.add('hidden');
+        document.getElementById('v-search-member').value = nama;
+    }
+
+    function setPaketVoucher(tipe) {
+        document.getElementById('v-tipe').value = tipe;
+        const isBulan = tipe === '1 BULAN';
+        document.getElementById('btn-v-bulan').className = isBulan ? 'p-4 rounded-2xl border-2 border-cyan-500/50 bg-cyan-500/10 text-cyan-400 font-bold text-[10px] uppercase' : 'p-4 rounded-2xl border-2 border-white/5 bg-white/5 text-gray-400 font-bold text-[10px] uppercase';
+        document.getElementById('btn-v-member').className = !isBulan ? 'p-4 rounded-2xl border-2 border-cyan-500/50 bg-cyan-500/10 text-cyan-400 font-bold text-[10px] uppercase' : 'p-4 rounded-2xl border-2 border-white/5 bg-white/5 text-gray-400 font-bold text-[10px] uppercase';
+        document.getElementById('area-v-bulan').classList.toggle('hidden-el', !isBulan);
+        document.getElementById('area-v-member').classList.toggle('hidden-el', isBulan);
+    }
+
+    function kirimVoucherWA() {
+        const nama = document.getElementById('v-target-nama').value;
+        const wa = document.getElementById('v-target-wa').value;
+        const tipe = document.getElementById('v-tipe').value;
+        let akses = "";
+        if (!nama) return alert("Pilih Pelanggan!");
+        if (tipe === '1 BULAN') {
+            akses = document.getElementById('v-kode-single').value;
+            if (!akses) return alert("Isi Kode!");
+        } else {
+            const u = document.getElementById('v-user').value; const p = document.getElementById('v-pass').value;
+            if (!u || !p) return alert("Isi User & Pass!");
+            akses = `User: ${u} | Pass: ${p}`;
+        }
+        const msg = `Halo *${nama}*, Terima kasih telah berlangganan di *PLALANGAN.NET*%0A%0A` +
+                    `Berikut akses internet Anda:%0A` +
+                    `Paket: *${tipe}*%0A` +
+                    `Akses: *${akses}*%0A%0A` +
+                    `_Berlaku s/d: ${new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString('id-ID')}_`;
+        window.open(`https://api.whatsapp.com/send?phone=${wa}&text=${msg}`, '_blank');
+        closeM();
+        fetch(API_URL, { 
+            method: "POST", 
+            body: JSON.stringify({ action: "add_history_voucher", nama, paket: tipe, akses, wa }) 
+        })
+        .then(() => { loadData(); })
+        .catch(e => console.log("Background save error:", e));
+    }
+
+    function renderHistory() {
+        if (dataHistory.length === 0) { 
+            document.getElementById('list-render').innerHTML = "<p class='text-center py-20 opacity-30 uppercase font-bold tracking-widest text-[10px]'>BELUM ADA RIWAYAT</p>"; 
+            return; 
+        }
+        let html = `<div class="overflow-x-auto -mx-2"><table class="w-full text-left border-collapse"><thead><tr class="border-b border-white/10"><th class="p-3 text-[8px] font-black text-cyan-400 uppercase">NAMA / PAKET</th><th class="p-3 text-[8px] font-black text-cyan-400 uppercase">KODE</th><th class="p-3 text-[8px] font-black text-cyan-400 uppercase text-right">KIRIM / AKHIR</th></tr></thead><tbody class="divide-y divide-white/5">`;
+        dataHistory.slice().reverse().forEach(h => {
+            const kodeAkses = h.akses || h.kode || '-';
+            const paket = h.paket || h.durasi || '-';
+            const tglKirim = h.tanggal || (h.timestamp ? h.timestamp.split('T')[0] : '-');
+            const tglExp = h.tglberakhir || '-';
+            html += `<tr class="hover:bg-white/5 transition-colors"><td class="p-3"><p class="text-[10px] font-bold text-white uppercase leading-tight">${h.nama || 'USER'}</p><p class="text-[7px] text-gray-500 font-bold uppercase mt-1">${paket}</p></td><td class="p-3"><span class="text-[9px] font-mono font-bold text-green-400 bg-green-400/10 px-2 py-1 rounded-md border border-green-400/20 lowercase">${kodeAkses}</span></td><td class="p-3 text-right"><p class="text-[8px] text-gray-400 font-bold">${tglKirim}</p><p class="text-[8px] text-red-400 font-black mt-1">${tglExp}</p></td></tr>`;
+        });
+        html += `</tbody></table></div>`;
+        document.getElementById('list-render').innerHTML = html;
+    }
+
+function renderPengeluaran() {
+        let keluar = JSON.parse(localStorage.getItem('plalangan_keluar')) || [];
+        
+        // Form Input Tetap di Atas
+        let html = `
+        <div class="bg-white/5 p-4 rounded-3xl border border-white/10 mb-6 space-y-3">
+            <p class="text-[10px] font-bold text-red-400 uppercase tracking-widest ml-1">Input Pengeluaran Baru</p>
+            <input type="text" id="ex-ket" placeholder="KETERANGAN" class="w-full bg-black/20 p-4 rounded-xl border border-white/5 text-white font-bold uppercase text-[11px] focus:border-red-500 outline-none">
+            <input type="number" id="ex-nom" placeholder="NOMINAL (RP)" class="w-full bg-black/20 p-4 rounded-xl border border-white/5 text-white font-bold text-[11px] focus:border-red-500 outline-none">
+            <button onclick="simpanKeluar()" class="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-xl uppercase text-xs shadow-lg shadow-red-900/20 transition-all active:scale-95">SIMPAN DATA</button>
+        </div>
+
+        <div class="overflow-hidden rounded-2xl border border-white/10">
+            <table class="w-full text-[11px] text-left border-collapse">
+                <thead class="bg-white/5 text-gray-400 uppercase font-bold">
+                    <tr>
+                        <th class="p-3">TGL</th>
+                        <th class="p-3">KET</th>
+                        <th class="p-3 text-right">NOMINAL</th>
+                        <th class="p-3 text-center">AKSI</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5 bg-black/20">`;
+
+        if (keluar.length === 0) {
+            html += `<tr><td colspan="4" class="p-10 text-center text-gray-500 italic uppercase">Belum ada data</td></tr>`;
+        } else {
+            // Kita balik urutannya agar yang terbaru di atas
+            let displayData = [...keluar].reverse();
+            
+            displayData.forEach((k, index) => {
+                // Kalkulasi index asli karena data di-reverse
+                const originalIndex = keluar.length - 1 - index;
+                const tglDisplay = k.tgl ? k.tgl.split('-').reverse().slice(0,2).join('/') : '-';
+                
+                html += `
+                <tr class="hover:bg-white/5 transition">
+                    <td class="p-3 text-gray-500">${tglDisplay}</td>
+                    <td class="p-3 text-white font-medium uppercase">${k.ket}</td>
+                    <td class="p-3 text-right text-red-400 font-bold">Rp${Number(k.nom).toLocaleString()}</td>
+                    <td class="p-3 text-center">
+                        <button onclick="hapusItemKeluar(${originalIndex})" class="bg-red-500/20 text-red-500 p-2 rounded-lg hover:bg-red-500 hover:text-white transition active:scale-90 inline-flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                            </svg>
+                        </button>
+                    </td>
+                </tr>`;
+            });
+        }
+
+        html += `</tbody></table></div>`;
+        document.getElementById('list-render').innerHTML = html;
+    }
+
+    // Pastikan fungsi hapus ini ada di bawah/luar fungsi render
+    function hapusItemKeluar(index) {
+        if(confirm("Hapus catatan pengeluaran ini?")) {
+            let keluar = JSON.parse(localStorage.getItem('plalangan_keluar')) || [];
+            keluar.splice(index, 1);
+            localStorage.setItem('plalangan_keluar', JSON.stringify(keluar));
+            updateDashboardStats();
+            renderPengeluaran();
+        }
+    }
+function simpanKeluar() {
+        const ket = document.getElementById('ex-ket').value; 
+        const nom = document.getElementById('ex-nom').value;
+        if(!ket || !nom) return alert("Isi Data!");
+        
+        let keluar = JSON.parse(localStorage.getItem('plalangan_keluar')) || [];
+        
+        // GUNAKAN FORMAT INI AGAR RENDER REKAP TIDAK ERROR
+        const tglSekarang = new Date().toISOString().split('T')[0]; 
+        
+        keluar.push({ ket, nom, tgl: tglSekarang });
+        localStorage.setItem('plalangan_keluar', JSON.stringify(keluar));
+        
+        document.getElementById('ex-ket').value = ""; // Bersihkan input setelah simpan
+        document.getElementById('ex-nom').value = "";
+        
+        updateDashboardStats(); 
+        renderPengeluaran();
+    }
+
+function renderRekap() {
+    // 1. Ambil data pengeluaran dari HP
+    const keluarArr = JSON.parse(localStorage.getItem('plalangan_keluar')) || [];
+    
+    // 2. Kelompokkan data Tagihan (Pemasukan) & Pengeluaran berdasarkan Bulan-Tahun
+    const rekapBulanan = {};
+
+    // Proses Tagihan Lunas (Pemasukan) - Dari Google Sheets
+    if (typeof dataTagihan !== 'undefined') {
+        dataTagihan.forEach(t => {
+            if (String(t.lunas).toUpperCase() === "TRUE") {
+                const key = `${t.bulan} ${t.tahun}`;
+                if (!rekapBulanan[key]) rekapBulanan[key] = { masuk: 0, keluar: 0 };
+                rekapBulanan[key].masuk += Number(t.jumlah || 0);
+            }
+        });
+    }
+
+    // Proses Pengeluaran - Dari localStorage HP
+    keluarArr.forEach(k => {
+        const d = new Date(k.tgl);
+        const namaBulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+        const key = `${namaBulan[d.getMonth()]} ${d.getFullYear()}`;
+        
+        if (!rekapBulanan[key]) rekapBulanan[key] = { masuk: 0, keluar: 0 };
+        rekapBulanan[key].keluar += Number(k.nom || 0);
+    });
+
+    // 3. Bangun Tampilan Tabel
+    let html = `
+    <div class="mb-6">
+        <h3 class="text-white font-bold text-sm mb-4 uppercase italic">📊 Riwayat Kas Bulanan</h3>
+        <div class="overflow-hidden rounded-2xl border border-white/10">
+            <table class="w-full text-[11px] text-left border-collapse">
+                <thead class="bg-white/5 text-gray-400 uppercase font-bold">
+                    <tr>
+                        <th class="p-3">Periode</th>
+                        <th class="p-3 text-right">Masuk</th>
+                        <th class="p-3 text-right">Keluar</th>
+                        <th class="p-3 text-right text-cyan-400">Sisa</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5 bg-black/20">`;
+
+    const keys = Object.keys(rekapBulanan).reverse();
+    if (keys.length === 0) {
+        html += `<tr><td colspan="4" class="p-10 text-center text-gray-500 italic uppercase">Belum ada data kas</td></tr>`;
+    } else {
+        keys.forEach(periode => {
+            const item = rekapBulanan[periode];
+            const sisa = item.masuk - item.keluar;
+            html += `
+            <tr class="hover:bg-white/5 transition">
+                <td class="p-3 text-white font-medium uppercase">${periode}</td>
+                <td class="p-3 text-right text-green-400 font-bold">Rp${item.masuk.toLocaleString()}</td>
+                <td class="p-3 text-right text-red-400 font-bold">Rp${item.keluar.toLocaleString()}</td>
+                <td class="p-3 text-right text-cyan-400 font-black">Rp${sisa.toLocaleString()}</td>
+            </tr>`;
+        });
+    }
+
+    html += `
+                </tbody>
             </table>
         </div>
     </div>
-</div>
-<div id="m-history_list" class="hidden-el">
-    <div class="overflow-x-auto">
-        <table class="w-full text-[10px]">
-            <thead>
-                <tr class="text-gray-500 border-b border-white/10 uppercase">
-                    <th class="text-left py-2">Nama</th>
-                    <th class="text-center py-2">Kode / User</th>
-                    <th class="text-right py-2">Berakhir</th>
-                </tr>
-            </thead>
-            <tbody id="history-render-list" class="divide-y divide-white/5">
-                </tbody>
-        </table>
-    </div>
-</div>
 
-<div id="m-voucher-input" class="hidden-el pt-4 space-y-4">
-    <div class="relative">
-        <input type="text" id="v-search-master" placeholder="CARI NAMA..." 
-            class="input-premium border-yellow-500/30 text-center uppercase"
-            oninput="searchVoucherMember()">
-        <div id="v-results" class="absolute z-50 w-full bg-[#1a1d24] rounded-xl mt-1 max-h-40 overflow-y-auto border border-white/10 hidden"></div>
+    <div class="grid grid-cols-2 gap-3 mb-6">
+        <button onclick="salinLaporan()" class="bg-white/5 text-white py-4 rounded-xl border border-white/10 text-[10px] font-bold uppercase">📋 Salin Teks</button>
+        <button onclick="kirimLaporanWA()" class="bg-green-600/20 text-green-400 py-4 rounded-xl border border-green-500/30 text-[10px] font-bold uppercase text-center">💹 Kirim WA</button>
     </div>
 
-    <input type="hidden" id="v-wa-selected">
-    <input type="hidden" id="v-nama-selected">
+    <button onclick="if(confirm('Hapus semua catatan pengeluaran di HP ini?')){localStorage.removeItem('plalangan_keluar'); updateDashboardStats(); renderRekap();}" 
+        class="w-full py-4 text-[9px] text-red-500/30 font-bold uppercase tracking-widest hover:text-red-500 transition border border-red-500/10 rounded-xl">
+        Reset Data Pengeluaran HP
+    </button>`;
 
-    <select id="v-paket" class="input-premium uppercase text-center text-white" onchange="aturInputVoucher()">
-        <option value="1 BULAN">PAKET 1 BULAN</option>
-        <option value="MEMBER">PAKET MEMBER</option>
-    </select>
-
-    <div class="flex gap-2">
-        <input type="text" id="v-user" placeholder="USERNAME" class="input-premium w-1/2 text-center uppercase hidden-el">
-        <input type="text" id="v-kode" placeholder="KODE/PWD" class="input-premium w-full text-center uppercase">
-    </div>
-
-    <div class="space-y-1">
-        <p class="text-[10px] font-bold text-gray-500 uppercase ml-2">Masa Aktif Hingga:</p>
-        <input type="date" id="v-expired" class="input-premium text-center uppercase">
-    </div>
-
-    <button onclick="sendVoucherWA()" class="w-full bg-green-600 p-5 rounded-2xl font-black uppercase shadow-lg shadow-green-900/40">
-        🚀 KIRIM WHATSAPP
-    </button>
-</div>
-
-        </div> <button onclick="closeM()" class="btn-back">✕</button>
-    </div> <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbyE4jl6wP6gFaFDVJ2r5CKokOkFzFMGSx7BMeJbI62EprmVgDA_1gmt6iiKgl0EJmkG/exec"; 
-    let dataTagihan = [], dataMaster = [], dataHistory = [];
-
-    async function load() {
-        try {
-            const res = await fetch(`${API_URL}?action=read`);
-            const json = await res.json();
-            dataTagihan = json.tagihan || [];
-            dataMaster = json.master || [];
-            dataHistory = json.history || [];
-            updateStats();
-        } catch(e) { console.error("Load Failed"); }
-    }
-
-function updateStats() {
-    // 1. Validasi: Jangan hitung jika data belum siap
-    if (!dataTagihan || dataTagihan.length === 0) return;
-
-    // 2. Hitung Uang Masuk (Hanya yang benar-benar TRUE)
-    const totalMasuk = dataTagihan.reduce((sum, item) => {
-        const status = String(item.lunas || "").trim().toUpperCase();
-        return status === "TRUE" ? sum + Number(item.jumlah || 0) : sum;
-    }, 0);
-    
-    // 3. Hitung Belum Bayar (Cari yang FALSE atau KOSONG)
-    // Kita gunakan .includes agar jika ada spasi di Sheets tetap terbaca
-    const belumCount = dataTagihan.filter(d => {
-        const s = String(d.lunas || "").trim().toUpperCase();
-        return s.includes("FALSE") || s === ""; 
-    }).length;
-
-    // 4. Hitung Pengeluaran (LocalStorage HP)
-    const ex = JSON.parse(localStorage.getItem('my_expenses')) || [];
-    const totalKeluar = ex.reduce((sum, item) => sum + Number(item.jumlah || 0), 0);
-
-    // 5. Update UI (Pastikan ID stat-uang sesuai dengan HTML baris 39)
-    const elMasuk = document.getElementById('stat-uang'); 
-    const elKeluar = document.getElementById('stat-keluar');
-    const elSaldo = document.getElementById('stat-saldo');
-    const elBelum = document.getElementById('stat-belum');
-
-    if(elBelum) elBelum.innerText = belumCount;
-    if(elMasuk) elMasuk.innerText = `Rp${totalMasuk.toLocaleString('id-ID')}`;
-    if(elKeluar) elKeluar.innerText = `Rp${totalKeluar.toLocaleString('id-ID')}`;
-    if(elSaldo) elSaldo.innerText = `Rp${(totalMasuk - totalKeluar).toLocaleString('id-ID')}`;
-}
-
-function renderTagihan(filter, key) {
-    const searchKey = (key || "").toUpperCase();
-    let source = [];
-
-    if (filter === 'false') {
-        // Ambil yang mengandung kata "FALSE" ATAU yang kolomnya kosong ""
-        source = dataTagihan.filter(d => {
-            const s = String(d.lunas || "").trim().toUpperCase();
-            return s.includes("FALSE") || s === "";
-        });
-    } else if (filter === 'true') {
-        // Hanya yang benar-benar ada kata "TRUE"
-        source = dataTagihan.filter(d => String(d.lunas || "").trim().toUpperCase().includes("TRUE"));
-    } else {
-        source = dataTagihan;
-    }
-    
-    let html = `<div class="space-y-3">`;
-    const finalData = source.filter(d => (d.nama || "").toUpperCase().includes(searchKey));
-
-    finalData.forEach(h => {
-        // Gunakan logika yang sama untuk menentukan warna (Merah jika bukan TRUE)
-        const isLunas = String(h.lunas || "").trim().toUpperCase().includes("TRUE");
-        const color = isLunas ? "text-green-500" : "text-red-500";
-
-        html += `
-        <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center border-l-4 ${isLunas ? 'border-green-500' : 'border-red-500'}" 
-             onclick="${!isLunas ? `pay('${h.id}')` : ''}">
-            <div>
-                <p class="font-black uppercase text-sm text-white">${h.nama}</p>
-                <p class="text-[9px] text-gray-500 font-bold uppercase">${h.bulan} ${h.tahun}</p>
-            </div>
-            <div class="text-right">
-                <p class="font-black text-sm ${color}">Rp${Number(h.jumlah || 0).toLocaleString('id-ID')}</p>
-                <p class="text-[8px] font-bold ${color} uppercase">${isLunas ? 'LUNAS' : 'KLIK UNTUK BAYAR'}</p>
-            </div>
-        </div>`;
-    });
-    
-    if (finalData.length === 0) {
-        html += `<p class='text-center text-gray-500 py-10 font-bold text-[10px] uppercase'>TIDAK ADA DATA ${filter === 'false' ? 'BELUM BAYAR' : (filter === 'true' ? 'LUNAS' : '')}</p>`;
-    }
-
-    document.getElementById('list-render').innerHTML = html + "</div>";
-}
-
-function renderMaster(key) {
-    const searchKey = (key || "").toUpperCase();
-    const list = document.getElementById('list-render');
-    if(!list) return; // 'opp' sudah dihapus
-
-    let html = `<div class="space-y-3">`;
-    
-    // Memfilter dataMaster (Sheet Master) berdasarkan nama
-    const filtered = dataMaster.filter(m => (m.nama || "").toUpperCase().includes(searchKey));
-
-    filtered.forEach(m => {
-        html += `
-        <div class="bg-white/5 p-4 rounded-2xl flex justify-between items-center border-l-4 border-blue-500">
-            <div>
-                <p class="font-black uppercase text-sm text-white">${m.nama}</p>
-                <p class="text-[9px] text-gray-500 font-bold uppercase">WA: ${m.wa || '-'}</p>
-            </div>
-            <div class="text-right">
-                <p class="text-[10px] text-blue-400 font-black">Rp${Number(m.nominal || 0).toLocaleString('id-ID')}</p>
-                <p class="text-[8px] text-gray-500 font-bold uppercase">${m.aktivasi || 'AKTIF'}</p>
-            </div>
-        </div>`;
-    });
-
-    if(filtered.length === 0) {
-        html += `<p class="text-center py-10 text-gray-500 text-[10px] font-bold uppercase">MEMBER TIDAK DITEMUKAN</p>`;
-    }
-
-    list.innerHTML = html + "</div>";
-}
-
-function renderHistory(key) {
-    const searchKey = (key || "").toUpperCase();
-    const list = document.getElementById('m-history_list'); 
-    if(!list) return;
-
-    // Sembunyikan jika input kosong
-    if (searchKey.length < 1) {
-        list.innerHTML = `
-            <div class="flex flex-col items-center justify-center py-20 opacity-30">
-                <p class="text-[10px] font-black uppercase tracking-widest text-center">
-                    Ketik nama pelanggan...
-                </p>
-            </div>`;
-        return;
-    }
-
-    let html = `<div class="space-y-3 pt-2">`;
-    const filtered = dataHistory.filter(h => (h.nama || "").toUpperCase().includes(searchKey)).reverse();
-
-    filtered.forEach(h => {
-        const nama = h.nama || "NONAME";
-        const kodeVoucher = h.kode || "-";
-        const durasi = h.durasi || "VOUCHER";
-        
-        // --- LOGIKA PERBAIKAN TANGGAL (ISO TO DD/MM/YYYY) ---
-        const formatTgl = (tglMentah) => {
-            if (!tglMentah || tglMentah === "-") return "-";
-            try {
-                const d = new Date(tglMentah);
-                // Cek apakah tanggal valid
-                if (isNaN(d.getTime())) return tglMentah; 
-                
-                const t = String(d.getDate()).padStart(2, '0');
-                const bln = String(d.getMonth() + 1).padStart(2, '0');
-                const thn = d.getFullYear();
-                return `${t}/${bln}/${thn}`;
-            } catch (e) { return tglMentah; }
-        };
-
-        const masaAktif = formatTgl(h.tglBerakhir);
-        const waktuInput = formatTgl(h.timestamp);
-
-        html += `
-        <div class="bg-white/5 p-4 rounded-2xl flex flex-col border-l-4 border-yellow-500 shadow-lg mb-2">
-            <div class="flex justify-between items-start mb-3">
-                <div>
-                    <p class="font-black uppercase text-sm text-white tracking-tight leading-none">${nama}</p>
-                    <p class="text-[9px] text-yellow-500/70 font-bold uppercase mt-1 italic">${durasi}</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-[7px] text-gray-600 font-bold italic">Dibuat: ${waktuInput}</p>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-4 bg-black/40 rounded-xl p-3 border border-white/5">
-                <div>
-                    <p class="text-[7px] text-gray-500 uppercase font-black mb-1 text-center border-b border-white/5 pb-1">KODE VOUCHER</p>
-                    <p class="text-[11px] text-white font-mono font-bold tracking-widest text-center mt-1">${kodeVoucher}</p>
-                </div>
-                <div class="border-l border-white/10">
-                    <p class="text-[7px] text-gray-500 uppercase font-black mb-1 text-center border-b border-white/5 pb-1">MASA AKTIF</p>
-                    <p class="text-[10px] text-red-400 font-bold text-center mt-1">${masaAktif}</p>
-                </div>
-            </div>
-        </div>`;
-    });
-
-    if (filtered.length === 0) {
-        html += `<p class="text-center py-10 text-gray-600 text-[10px] font-bold uppercase tracking-widest">Nama "${searchKey}" tidak ditemukan</p>`;
-    }
-
-    list.innerHTML = html + "</div>";
-}
-
-// BARU MULAI REKAP BULANAN DI LUARNYA
-function renderRekapBulanan() {
-    const list = document.getElementById('rekap-list');
-    if (!list) return;
-
-    const lunasData = dataTagihan.filter(d => String(d.lunas || "").trim().toUpperCase() === "TRUE");
-
-    const rekapMap = {};
-    lunasData.forEach(d => {
-        const key = `${d.bulan} ${d.tahun}`;
-        const jumlah = Number(d.jumlah || 0);
-        if (!rekapMap[key]) rekapMap[key] = 0;
-        rekapMap[key] += jumlah;
-    });
-
-    let html = "";
-    Object.keys(rekapMap).forEach(periode => {
-        html += `
-        <tr class="border-b border-white/5 hover:bg-white/5 transition-all">
-            <td class="py-3 px-2 font-bold text-gray-300 uppercase text-[10px]">${periode}</td>
-            <td class="py-3 px-2 text-right">
-                <p class="font-black text-green-500 text-[11px]">Rp${rekapMap[periode].toLocaleString('id-ID')}</p>
-                <p class="text-[7px] text-gray-500 uppercase font-bold">Total Pendapatan</p>
-            </td>
-        </tr>`;
-    });
-    list.innerHTML = html || "<tr><td colspan='2' class='text-center py-4 text-gray-500'>BELUM ADA DATA LUNAS</td></tr>";
-}
-    function liveSearchMain() {
-        const val = document.getElementById('main-search').value.toUpperCase();
-        if(!val) return document.getElementById('search-results-area').innerHTML = "";
-        let html = `<div class="space-y-3">`;
-        dataTagihan.filter(d => d.nama.toUpperCase().includes(val)).forEach(h => {
-            const isLunas = String(h.lunas).trim().toUpperCase() === "TRUE";
-            html += `<div class="bg-[#1a1d24] p-4 rounded-2xl flex justify-between items-center border-l-4 ${isLunas?'border-green-500':'border-red-500'}">
-                <div><p class="font-black uppercase text-xs">${h.nama}</p><p class="text-[8px] text-gray-500 uppercase">${h.bulan}</p></div>
-                <p class="font-black text-xs ${isLunas?'text-green-500':'text-red-500'}">Rp${Number(h.jumlah).toLocaleString()}</p>
-            </div>`;
-        });
-        document.getElementById('search-results-area').innerHTML = html + "</div>";
-    }
-
-// 1. FUNGSI SIMPAN (Sekarang dengan Tanggal)
-function saveExpense() {
-    const tgl = document.getElementById('ex-tgl').value;
-    const ket = document.getElementById('ex-ket').value;
-    const jml = document.getElementById('ex-jml').value;
-
-    if(!tgl || !ket || !jml) return alert("LENGKAPI TANGGAL, KETERANGAN & JUMLAH!");
-
-    const ex = JSON.parse(localStorage.getItem('my_expenses')) || [];
-    
-    // Simpan sebagai objek lengkap
-    ex.push({ 
-        tgl: tgl, 
-        ket: ket.toUpperCase(), 
-        jumlah: jml 
-    });
-
-    localStorage.setItem('my_expenses', JSON.stringify(ex));
-    
-    // Reset Form (Keterangan & Jumlah saja, tanggal biarkan tetap)
-    document.getElementById('ex-ket').value = "";
-    document.getElementById('ex-jml').value = "";
-    
-    renderRekapList(); // Langsung update tabel di bawahnya
-    updateStats();     // Update angka "Keluar" di dashboard utama
-    alert("BERHASIL DISIMPAN!");
-}
-
-// ... (lanjutan dari saveExpense di atas) ...
-
-// 2. FUNGSI TAMPILKAN TABEL (4 Kolom: Tgl, Ket, Jml, Hapus)
-function renderRekapList() {
-    const list = document.getElementById('rekap-list');
-    if (!list) return;
-
-    const ex = JSON.parse(localStorage.getItem('my_expenses')) || [];
-    let html = "";
-
-    ex.forEach((item, index) => {
-        // Logika: Jika item.tgl masih format YYYY-MM-DD (dari data lama), kita balik.
-        // Jika sudah format DD/MM/YYYY (data baru), kita biarkan.
-        let tglTampil = item.tgl;
-        if (tglTampil && tglTampil.includes('-')) {
-            const [y, m, d] = tglTampil.split('-');
-            tglTampil = `${d}/${m}/${y}`;
-        }
-
-        html += `
-        <tr class="border-b border-white/5 text-[9px]">
-            <td class="py-2 px-1 text-gray-400 italic">${tglTampil}</td>
-            <td class="py-2 font-bold uppercase text-gray-200">${item.ket}</td>
-            <td class="py-2 text-right font-black text-red-400">Rp${Number(item.jumlah).toLocaleString('id-ID')}</td>
-            <td class="py-2 text-center">
-                <button onclick="deleteExpense(${index})" class="text-red-500 font-bold text-xl px-2 leading-none">
-                    ×
-                </button>
-            </td>
-        </tr>`;
-    });
-
-    list.innerHTML = html || "<tr><td colspan='4' class='text-center py-4 text-gray-600 uppercase text-[8px]'>Belum ada pengeluaran</td></tr>";
-}
-
-// 3. FUNGSI HAPUS PENGELUARAN (Tetap sama, pastikan updateStats terpanggil)
-function deleteExpense(index) {
-    if (!confirm("HAPUS CATATAN INI?")) return;
-    
-    let ex = JSON.parse(localStorage.getItem('my_expenses')) || [];
-    ex.splice(index, 1); 
-    
-    localStorage.setItem('my_expenses', JSON.stringify(ex));
-    
-    renderRekapList(); 
-    if (typeof updateStats === "function") updateStats(); 
-}
-
-function openM(type, filter = 'all') {
+    document.getElementById('list-render').innerHTML = html;
+    // Pastikan modal terbuka
     document.getElementById('modal-container').style.display = 'flex';
-    
-    // Judul Modal Spesifik
-    const titleEl = document.getElementById('modal-title');
-    if(type === 'gen') titleEl.innerText = 'BUAT TAGIHAN';
-    else if(type === 'history_list') titleEl.innerText = 'HISTORY VOUCHER';
-    else if(type === 'master') titleEl.innerText = 'DAFTAR MEMBER';
-    else titleEl.innerText = type.toUpperCase();
+}
 
-    // 1. Membersihkan semua tampilan menu
-    ['list-render', 'm-pengeluaran', 'm-rekap', 'm-tambah', 'm-gen', 'm-voucher-input', 'm-history_list', 'modal-search-box'].forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.classList.add('hidden-el');
-    });
-
-    // 2. Logika untuk menu yang memiliki fitur Pencarian (Search)
-    if(['tagihan', 'master', 'history_list'].includes(type)) {
-        if(type === 'history_list') {
-            document.getElementById('m-history_list').classList.remove('hidden-el');
-        } else {
-            document.getElementById('list-render').classList.remove('hidden-el');
-        }
-
-        document.getElementById('modal-search-box').classList.remove('hidden-el');
-        const si = document.getElementById('modal-search-input');
+    function updateDashboardStats() {
+        const income = dataTagihan.filter(t => String(t.lunas).toUpperCase() === "TRUE").reduce((s, t) => s + Number(t.jumlah || 0), 0);
+        const unpaid = dataTagihan.filter(t => String(t.lunas).toUpperCase() !== "TRUE").length;
+        const totalKeluar = (JSON.parse(localStorage.getItem('plalangan_keluar')) || []).reduce((s, k) => s + Number(k.nom), 0);
+        document.getElementById('stat-belum').innerText = unpaid;
+        document.getElementById('stat-uang').innerText = `Rp${income.toLocaleString('id-ID')}`;
+        document.getElementById('stat-keluar').innerText = `Rp${totalKeluar.toLocaleString('id-ID')}`;
+        document.getElementById('stat-saldo').innerText = `Rp${(income - totalKeluar).toLocaleString('id-ID')}`;
+    }
+    // --- FITUR BROADCAST WA KE SEMUA PELANGGAN ---
+    function renderBroadcast() {
+        document.getElementById('modal-title').innerText = "Broadcast WhatsApp";
+        // Sembunyikan kotak cari agar tidak mengganggu
+        if(document.getElementById('search-box')) document.getElementById('search-box').classList.add('hidden');
+        document.getElementById('modal-container').style.display = 'flex';
         
-// Reset input pencarian
-        si.value = ""; 
-
-        si.oninput = () => {
-            const val = si.value.toUpperCase();
+        let html = `
+        <div class="space-y-4">
+            <div class="bg-cyan-500/10 p-5 rounded-3xl border border-cyan-500/20 mb-4">
+                <h3 class="text-cyan-400 font-black text-xs uppercase tracking-widest">📢 Pesan Massal</h3>
+                <p class="text-[10px] text-gray-400 mt-1">Kirim pesan ke semua pelanggan yang ada di Master Pelanggan.</p>
+            </div>
             
-            // GUNAKAN ELSE IF YANG TEGAS
-            if (type === 'master') {
-                renderMaster(val); 
-            } else if (type === 'tagihan') {
-                renderTagihan(filter, val); 
-            } else if (type === 'history_list') {
-                renderHistory(val);
-            }
-        };
-        
-        // JALANKAN PEMICU SESUAI TYPE
-// JALANKAN PEMICU SESUAI TYPE (Agar data langsung muncul saat modal dibuka)
-        if (type === 'master') {
-            renderMaster(""); 
-        } else if (type === 'history_list') {
-            renderHistory(""); // Tambahkan ini agar History terpanggil saat dibuka
-        } else {
-            // Untuk Tagihan dan lainnya, pemicu oninput sudah cukup
-            si.oninput(); 
-        }
+            <div class="space-y-2">
+                <label class="text-[10px] font-bold text-gray-500 ml-2 uppercase">Isi Pesan:</label>
+                <textarea id="bc-pesan" rows="6" placeholder="Tulis pesan di sini..." 
+                    class="w-full bg-white/5 p-5 rounded-[2rem] border border-white/10 text-white text-xs focus:border-cyan-500 outline-none resize-none shadow-inner"></textarea>
+            </div>
 
-    } else {
-        // 3. Logika untuk menu Form/Input/Lainnya
-        const targetMenu = document.getElementById('m-' + type);
-        if(targetMenu) targetMenu.classList.remove('hidden-el');
-        
-        if(type === 'voucher-input') aturInputVoucher();
-        
-        if(type === 'rekap') {
-            renderRekapBulanan(); 
-        }
-        
-        if(type === 'pengeluaran') {
-            const today = new Date().toISOString().split('T')[0];
-            const inputTgl = document.getElementById('ex-tgl');
-            if(inputTgl) inputTgl.value = today; 
-            renderRekapList();
-        }
-    }
-}
-    async function saveNewMember() {
-        const nama = document.getElementById('new-nama').value;
-        const nom = document.getElementById('new-nominal').value;
-        const wa = document.getElementById('new-wa').value;
-        const status = document.getElementById('new-status').value;
-        if(!nama || !nom || !wa || !status) return alert("Semua kolom harus diisi!");
-        
-        const btn = event.target;
-        const originalText = btn.innerText;
-        btn.innerText = "SEDANG MENYIMPAN...";
-        btn.disabled = true;
+            <div class="bg-yellow-500/10 p-4 rounded-2xl border border-yellow-500/20 flex gap-3 items-center">
+                <span class="text-xl">⚠️</span>
+                <p class="text-[9px] text-gray-400 italic font-medium leading-tight">
+                    Pop-up WA akan terbuka otomatis setiap 2.5 detik. Pastikan "Allow Pop-ups" di browser HP Bang.
+                </p>
+            </div>
 
-        try {
-            await fetch(API_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify({ action: 'tambahMaster', nama, nominal: nom, wa, status })
-            });
-            alert("MEMBER BERHASIL DITAMBAHKAN!");
-            document.getElementById('new-nama').value = "";
-            document.getElementById('new-nominal').value = "";
-            document.getElementById('new-wa').value = "";
-            document.getElementById('new-status').value = "";
-            closeM(); load();
-        } catch (e) {
-            alert("GAGAL MENYIMPAN DATA!");
-        } finally {
-            btn.innerText = originalText;
-            btn.disabled = false;
-        }
-    }
-
-    async function prosesGenerate() {
-        const bln = document.getElementById('gen-bulan').value;
-        const thn = document.getElementById('gen-tahun').value;
-        if(!confirm(`Buat tagihan massal untuk ${bln} ${thn}?`)) return;
-
-        const btn = event.target;
-        const originalText = btn.innerText;
-        btn.innerText = "SEDANG MEMPROSES...";
-        btn.disabled = true;
-
-        try {
-            await fetch(`${API_URL}?action=generate&bulan=${bln}&tahun=${thn}`);
-            alert("PROSES SELESAI!");
-            closeM(); load();
-        } catch (e) {
-            alert("PERINTAH TERKIRIM");
-            closeM(); load();
-        } finally {
-            btn.innerText = originalText;
-            btn.disabled = false;
-        }
-    }
-
-    async function pay(id) {
-        if(!confirm("Proses pelunasan?")) return;
-        try {
-            await fetch(`${API_URL}?action=update&id=${id}`);
-            alert("Berhasil!"); load(); closeM();
-        } catch(e) { alert("Selesai diproses!"); load(); closeM(); }
-    }
-
-    function closeM() { document.getElementById('modal-container').style.display = 'none'; }
-    window.onload = load;
-    // 1. Logika Pencarian Nama dari Sheet Master
-function searchVoucherMember() {
-    const val = document.getElementById('v-search-master').value.toUpperCase();
-    const resDiv = document.getElementById('v-results');
-    
-    if(val.length < 1) { 
-        resDiv.classList.add('hidden'); 
-        return; 
-    }
-
-    // Mengambil data dari variabel dataMaster yang sudah ada
-    let matches = dataMaster.filter(d => d.nama.toUpperCase().includes(val));
-    let html = "";
-    
-    matches.forEach(m => {
-        html += `
-        <div class="p-4 border-b border-white/5 hover:bg-blue-600 cursor-pointer text-white text-xs font-bold uppercase" 
-             onclick="selectVoucherMember('${m.nama}', '${m.wa}')">
-             ${m.nama} <span class="text-[8px] opacity-50 block">WA: ${m.wa}</span>
+            <button onclick="kirimBC()" class="w-full bg-cyan-500 text-black font-black py-5 rounded-[2rem] uppercase text-xs shadow-lg shadow-cyan-500/20 active:scale-95 transition-all">
+                Kirim ke ${dataMaster.length} Pelanggan
+            </button>
         </div>`;
+        
+        document.getElementById('list-render').innerHTML = html;
+    }
+
+    function kirimBC() {
+        const pesan = document.getElementById('bc-pesan').value;
+        if(!pesan) return alert("Isi pesannya dulu, Bang!");
+        
+        if(confirm(`Kirim ke ${dataMaster.length} pelanggan?`)) {
+            dataMaster.forEach((p, index) => {
+                setTimeout(() => {
+                    let noWa = String(p.wa).replace(/\D/g, '');
+                    if(noWa.startsWith('0')) noWa = '62' + noWa.substring(1);
+                    else if(!noWa.startsWith('62')) noWa = '62' + noWa;
+                    
+                    const url = `https://api.whatsapp.com/send?phone=${noWa}&text=${encodeURIComponent(pesan)}`;
+                    window.open(url, '_blank');
+                }, index * 2500); 
+            });
+        }
+    }
+
+function closeM() { 
+        document.getElementById('modal-container').style.display = 'none'; 
+    }
+
+    // --- LOGIKA LOGIN & LOGOUT BARU ---
+    const PASS_SISTEM = "admin12345";
+
+    function cekLogin() {
+        const input = document.getElementById('pass-admin').value;
+        if(input === PASS_SISTEM) {
+            document.getElementById('login-screen').style.display = 'none'; 
+            sessionStorage.setItem('is_auth', 'true');
+            loadData(); // Data baru ditarik SETELAH login sukses
+        } else {
+            alert("PASSWORD SALAH, AKSES DITOLAK!");
+            document.getElementById('pass-admin').value = "";
+        }
+    }
+
+    function logout() {
+        if(confirm("Yakin ingin keluar dari dashboard?")) {
+            sessionStorage.removeItem('is_auth');
+            location.reload(); 
+        }
+    }
+
+    // Pengganti window.onload = loadData;
+    window.addEventListener('load', () => {
+        if(sessionStorage.getItem('is_auth') === 'true') {
+            document.getElementById('login-screen').style.display = 'none';
+            loadData();
+        } else {
+            document.getElementById('login-screen').style.display = 'flex';
+        }
     });
-    
-    resDiv.innerHTML = html || '<div class="p-4 text-gray-500 text-xs italic">Nama tidak ditemukan</div>';
-    resDiv.classList.remove('hidden');
-}
-
-// 2. Logika Memilih Nama Pelanggan
-function selectVoucherMember(nama, wa) {
-    document.getElementById('v-search-master').value = nama;
-    document.getElementById('v-nama-selected').value = nama;
-    document.getElementById('v-wa-selected').value = wa;
-    document.getElementById('v-results').classList.add('hidden');
-}
-// 1. FUNGSI LOGIKA TAMPILAN (TARUH DI SINI)
-function aturInputVoucher() {
-    const paket = document.getElementById('v-paket').value;
-    const inputUser = document.getElementById('v-user');
-    const inputKode = document.getElementById('v-kode');
-    const inputExpired = document.getElementById('v-expired'); // Ambil elemen tanggal
-
-    // 1. LOGIKA TAMPILAN INPUT
-    if (paket === "MEMBER") {
-        inputUser.classList.remove('hidden-el');
-        inputKode.classList.remove('w-full');
-        inputKode.classList.add('w-1/2');
-    } else {
-        inputUser.classList.add('hidden-el');
-        inputKode.classList.remove('w-1/2');
-        inputKode.classList.add('w-full');
-        inputUser.value = ""; 
-    }
-
-    // 2. LOGIKA TANGGAL OTOMATIS (+30 HARI)
-    let tgl = new Date();
-    tgl.setDate(tgl.getDate() + 30); // Tambah 30 hari dari hari ini
-    
-    // Format YYYY-MM-DD agar bisa diterima oleh input type="date"
-    let y = tgl.getFullYear();
-    let m = ("0" + (tgl.getMonth() + 1)).slice(-2);
-    let d = ("0" + tgl.getDate()).slice(-2);
-    
-    inputExpired.value = `${y}-${m}-${d}`;
-} 
-
-    // 2. FUNGSI PENCARIAN NAMA
-async function sendVoucherWA() {
-    const nama = document.getElementById('v-nama-selected').value;
-    const wa = document.getElementById('v-wa-selected').value;
-    const paket = document.getElementById('v-paket').value;
-    const user = document.getElementById('v-user').value;
-    const kode = document.getElementById('v-kode').value;
-    const expiredRaw = document.getElementById('v-expired').value;
-
-    if (!nama || !kode || !expiredRaw || (paket === "MEMBER" && !user)) {
-        return alert("Mohon lengkapi data!");
-    }
-
-    // --- LOGIKA WAKTU (DITERAPKAN DARI STRUKTUR TADI) ---
-    const d = new Date();
-    const jam = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
-    
-    // Ambil tanggal dari input dan tambahkan keterangan jam
-    const exp = expiredRaw.split('-');
-    const tglBerakhirStr = `${exp[2]}/${exp[1]}/${exp[0]} pukul ${jam}`;
-
-    // --- LOGIKA PESAN DENGAN FORMAT BARIS BARU (BACKTICK) ---
-    let detailVoucher = "";
-    if (paket === "MEMBER") {
-        detailVoucher = `_MEMBER_
-👤 *User:* ${user}
-🔑 *Password:* ${kode}
-⏰ *Masa Aktif:* ${tglBerakhirStr}`;
-    } else {
-        detailVoucher = `_VOUCHER ${paket}_
-🎫 *Kode:* ${kode}
-⏰ *Masa Aktif:* ${tglBerakhirStr}`;
-    }
-
-    const pesan = `*PLALANGAN.NET*.
-
-${detailVoucher}
-
-⚠️ *PENTING:*
-simpan code/voucher selama masih aktif. antisipasi login ulang (erorr)
-
-_Gunakan MAC PONSEL /PERANGKAT_`;
-
-    // --- KIRIM KE GOOGLE SHEETS ---
-    const kodeFinal = (paket === "MEMBER") ? `${user}/${kode}` : kode;
-    try {
-        fetch(API_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: JSON.stringify({ 
-                action: 'history', 
-                nama: nama, 
-                paket: paket, 
-                kode: kodeFinal, 
-                expired: tglBerakhirStr 
-            })
-        });
-    } catch (e) { console.log("Gagal sinkron"); }
-
-    // --- EKSEKUSI WHATSAPP ---
-let cleanWA = wa.replace(/\D/g, '');
-    if (cleanWA.startsWith('0')) cleanWA = '62' + cleanWA.substring(1);
-
-const linkWA = `https://api.whatsapp.com/send?phone=${cleanWA}&text=${encodeURIComponent(pesan)}`;
-    
-    window.open(linkWA, '_blank');
-};
-// ==========================================
-// LOGIKA LOGIN PIN PLALANGAN.NET
-// ==========================================
-let currentPin = "";
-const KODE_PIN = "1234"; // Ganti dengan PIN pilihanmu
-
-function inputPin(num) {
-    if (currentPin.length < 4) {
-        currentPin += num;
-        updatePinDots();
-    }
-}
-
-function updatePinDots() {
-    for (let i = 1; i <= 4; i++) {
-        const dot = document.getElementById(`pin-${i}`);
-        if (dot) {
-            if (i <= currentPin.length) {
-                dot.classList.add('active'); 
-            } else {
-                dot.classList.remove('active');
-            }
-        }
-    }
-}
-
-function checkPin() {
-    // Tambahkan pengecekan panjang PIN agar lebih pasti
-    if (currentPin.length < 4) {
-        alert("Masukkan 4 digit PIN!");
-        return;
-    }
-
-    if (currentPin === KODE_PIN) {
-        const screen = document.getElementById('login-screen');
-        if (screen) {
-            screen.classList.add('hidden-el');
-            localStorage.setItem('plalangan_auth', 'true');
-            // Bersihkan PIN setelah login berhasil
-            currentPin = "";
-            updatePinDots();
-        }
-    } else {
-        alert("PIN SALAH!");
-        clearPin();
-    }
-}
-
-function clearPin() {
-    currentPin = "";
-    updatePinDots();
-}
-// BATAS AKHIR LOGIKA PIN
-// Fungsi Logout untuk menu Logout yang baru dibuat
-function prosesLogout() {
-    if(confirm("Keluar dari sistem?")) {
-        localStorage.removeItem('plalangan_auth');
-        location.reload(); 
-    }
-}
-
-// Cek status saat aplikasi dibuka
-window.addEventListener('load', () => {
-    if (localStorage.getItem('plalangan_auth') === 'true') {
-        document.getElementById('login-screen').classList.add('hidden-el');
-    }
-});
 </script>
 </body>
 </html>

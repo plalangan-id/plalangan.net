@@ -16,7 +16,7 @@
         .icon-menu { @apply flex flex-col items-center justify-center transition-all duration-300; background: transparent; padding: 15px 0; border: none; }
         .icon-menu:active { transform: scale(0.85); opacity: 0.6; }
         .icon-menu span { font-size: 42px; margin-bottom: 10px; filter: drop-shadow(0 0 12px rgba(255,255,255,0.1)); display: block; }
-        .icon-menu p { font-size: 9px; font-weight: 800; color: rgba(255,255,255,0.5); letter-spacing: 0.05em; text-transform: uppercase; }
+        .icon-menu p { font-size: 8px; font-weight: 800; color: rgba(255,255,255,0.5); letter-spacing: 0.05em; text-transform: uppercase; }
         .search-container { background: rgba(255,255,255,0.03); border-radius: 18px; padding: 0 20px; border: 1px solid rgba(255,255,255,0.08); }
         .modal-overlay { position: fixed; inset: 0; background: rgba(4, 5, 7, 0.98); backdrop-filter: blur(20px); display: none; flex-direction: column; z-index: 1000; padding: 25px; }
         .btn-back { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #ffffff; color: #000; width: 50px; height: 50px; border-radius: 50%; font-size: 20px; display: flex; align-items: center; justify-content: center; z-index: 1100; font-weight: bold; }
@@ -27,27 +27,51 @@
 </head>
 <body class="p-6">
 
-    <div class="text-center mb-10 mt-2">
-        <h1 class="text-3xl font-black tracking-tighter uppercase text-white">PLALANGAN<span class="text-cyan-400">.NET</span></h1>
-        <p class="text-[8px] font-bold text-gray-400 uppercase tracking-[0.4em] mt-1">NMS Executive Edition</p>
+    <div id="login-screen" class="fixed inset-0 bg-[#0f172a] flex flex-col justify-center items-center z-[10000] px-6">
+    <div class="w-full max-w-xs bg-white/5 p-10 rounded-[2.5rem] border border-white/10 shadow-2xl text-center">
+        <div class="mb-6 inline-flex p-4 rounded-3xl bg-cyan-500/10 text-cyan-500 text-3xl">
+            🔒
+        </div>
+        <h1 class="text-white font-black tracking-widest text-lg mb-8 uppercase">Login Admin</h1>
+        
+        <input type="password" id="pass-admin" placeholder="PASSWORD" 
+               class="w-full bg-slate-950 border border-white/10 p-5 rounded-2xl text-center text-white font-black outline-none focus:border-cyan-500 mb-4 tracking-widest">
+        
+        <button onclick="cekLogin()" class="w-full bg-cyan-500 text-black font-black py-4 rounded-2xl uppercase text-xs shadow-lg shadow-cyan-500/20 active:scale-95 transition-all">
+            Unlock Dashboard
+        </button>
     </div>
+</div>
+
+<nav class="p-6 py-8 flex justify-between items-center bg-slate-900/50 sticky top-0 z-50 backdrop-blur-md">
+    <div>
+        <h2 class="font-black text-white tracking-tighter text-2xl uppercase leading-none">
+            PLALANGAN<span class="text-cyan-500">.NET</span>
+        </h2>
+        <p class="text-[8px] text-gray-300 font-bold tracking-[0.4em] uppercase mt-1">Administrator Billing System</p>
+    </div>
+    
+    <button onclick="logout()" class="bg-red-500/10 border border-red-500/30 text-red-500 text-[9px] font-black px-4 py-2 rounded-xl active:scale-90 transition-all uppercase tracking-widest">
+        EXIT
+    </button>
+</nav>
 
     <div class="grid grid-cols-4 gap-2 mb-10">
         <div class="stat-box">
-            <p class="text-[7px] font-bold text-gray-500 mb-1 uppercase">Unpaid</p>
+            <p class="text-[9px] font-bold text-gray-300 mb-1 uppercase">Belum Bayar</p>
             <h2 id="stat-belum" class="text-lg font-black neon-text-red">0</h2>
         </div>
         <div class="stat-box">
-            <p class="text-[7px] font-bold text-gray-500 mb-1 uppercase">Income</p>
-            <h2 id="stat-uang" class="text-[9px] font-black neon-text-green">Rp0</h2>
+            <p class="text-[9px] font-bold text-gray-300 mb-1 uppercase">Masuk</p>
+            <h2 id="stat-uang" class="text-[11px] font-black neon-text-green">Rp0</h2>
         </div>
         <div class="stat-box">
-            <p class="text-[7px] font-bold text-gray-500 mb-1 uppercase">Expense</p>
-            <h2 id="stat-keluar" class="text-[9px] font-black neon-text-red">Rp0</h2>
+            <p class="text-[9px] font-bold text-gray-300 mb-1 uppercase">Keluar</p>
+            <h2 id="stat-keluar" class="text-[11px] font-black neon-text-red">Rp0</h2>
         </div>
         <div class="stat-box">
-            <p class="text-[7px] font-bold text-gray-500 mb-1 uppercase">Balance</p>
-            <h2 id="stat-saldo" class="text-[9px] font-black neon-text-blue">Rp0</h2>
+            <p class="text-[9px] font-bold text-gray-300 mb-1 uppercase">Saldo</p>
+            <h2 id="stat-saldo" class="text-[11px] font-black neon-text-blue">Rp0</h2>
         </div>
     </div>
 
@@ -85,7 +109,7 @@
     </div>
 
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbwooj1hUXSlBQuJeMEI9c83Gw7DPxRvCC968_shZ4Sa4h6uKqebR9xHji2AmKX0kHkbAg/exec"; 
+    const API_URL = "https://script.google.com/macros/s/AKfycbxGZ-bvCl2NiS2el5Fg3XLuK_L2Ol3tJFt_DFSup6Eez2RQWuVBR3HFgB45OWwSTnsWXg/exec"; 
     let dataMaster = [], dataTagihan = [], dataHistory = [], dataRouter = [];
 
     async function loadData() {
@@ -196,7 +220,7 @@
                     <p class="text-[10px] font-mono text-gray-500 uppercase">${r.mac || '-'}</p>
                 </td>
                 <td class="p-3 text-right">
-                    <button onclick="openEditRouter('${r.mac}')" 
+                    <button onclick="openEditRouter('${r.ip}')" 
                         class="bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-[8px] font-bold px-3 py-2 rounded-lg uppercase">
                         EDIT
                     </button>
@@ -247,41 +271,48 @@
         </div>`;
     }
 
- // --- FUNGSI OPEN FORM EDIT ROUTER (VERSI BISA EDIT MAC) ---
-function openEditRouter(mac) {
-    const r = dataRouter.find(x => x.mac === mac);
-    if(!r) return;
+// --- FUNGSI OPEN FORM EDIT ROUTER (BISA EDIT MAC) ---
+function openEditRouter(ip) {
+    // CARI DATA BERDASARKAN IP (Karena MAC masih banyak yang kosong)
+    const r = dataRouter.find(x => x.ip.toString().trim() === ip.toString().trim());
     
-    document.getElementById('modal-title').innerText = "EDIT ROUTER";
+    if(!r) {
+        alert("Waduh Ketua, data dengan IP " + ip + " tidak ditemukan!");
+        return;
+    }
+    
+    document.getElementById('modal-title').innerText = "LENGKAPI ROUTER: " + r.ip;
     document.getElementById('modal-search-box').classList.add('hidden-el');
     
     document.getElementById('list-render').innerHTML = `
     <div class="space-y-4 p-2 pb-10 animate-in fade-in duration-300">
+        
         <div class="space-y-1">
-            <label class="text-[8px] font-bold text-cyan-500 ml-2 uppercase">MAC Address</label>
-            <input type="text" id="er-mac" value="${r.mac}" class="w-full bg-cyan-500/10 border border-cyan-500/30 p-5 rounded-2xl text-white font-bold focus:border-cyan-500 outline-none uppercase">
-            <input type="hidden" id="er-mac-old" value="${r.mac}">
+            <label class="text-[8px] font-bold text-cyan-500 ml-2 uppercase">IP Address (Kunci)</label>
+            <input type="text" id="er-ip" value="${r.ip}" class="w-full bg-cyan-500/10 border border-cyan-500/30 p-5 rounded-2xl text-white font-bold outline-none uppercase" readonly>
+            
+            <input type="hidden" id="er-ip-old" value="${r.ip}">
+        </div>
+
+        <div class="space-y-1">
+            <label class="text-[8px] font-bold text-yellow-500 ml-2 uppercase">MAC Address (Silakan Isi)</label>
+            <input type="text" id="er-mac" value="${r.mac || ''}" placeholder="00:00:00:00:00:00" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold uppercase focus:border-cyan-500 outline-none">
         </div>
 
         <div class="space-y-1">
             <label class="text-[8px] font-bold text-gray-500 ml-2 uppercase">Lokasi / Nama Router</label>
-            <input type="text" id="er-lokasi" value="${r.lokasi}" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold uppercase focus:border-cyan-500 outline-none">
+            <input type="text" id="er-lokasi" value="${r.lokasi || ''}" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold uppercase focus:border-cyan-500 outline-none">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
             <div class="space-y-1">
                 <label class="text-[8px] font-bold text-gray-500 ml-2 uppercase">SSID</label>
-                <input type="text" id="er-ssid" value="${r.ssid}" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold focus:border-cyan-500 outline-none">
+                <input type="text" id="er-ssid" value="${r.ssid || ''}" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold focus:border-cyan-500 outline-none">
             </div>
             <div class="space-y-1">
                 <label class="text-[8px] font-bold text-gray-500 ml-2 uppercase">Password</label>
-                <input type="text" id="er-pass" value="${r.pass}" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold focus:border-cyan-500 outline-none">
+                <input type="text" id="er-pass" value="${r.pass || ''}" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold focus:border-cyan-500 outline-none">
             </div>
-        </div>
-
-        <div class="space-y-1">
-            <label class="text-[8px] font-bold text-gray-500 ml-2 uppercase">IP Address</label>
-            <input type="text" id="er-ip" value="${r.ip}" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold focus:border-cyan-500 outline-none">
         </div>
 
         <div class="space-y-1">
@@ -289,15 +320,14 @@ function openEditRouter(mac) {
             <textarea id="er-catatan" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold h-24 focus:border-cyan-500 outline-none">${r.catatan || ''}</textarea>
         </div>
         
-        <button onclick="prosesSimpanEdit('router')" class="w-full bg-cyan-500 text-black font-black py-5 rounded-2xl uppercase mt-4 active:scale-95 transition-all">💾 UPDATE INFO ROUTER</button>
+        <button onclick="prosesSimpanEdit('router')" class="w-full bg-cyan-500 text-black font-black py-5 rounded-2xl uppercase mt-4 shadow-lg shadow-cyan-500/20 active:scale-95 transition-all">💾 SIMPAN DATA ROUTER</button>
         
         <div class="pt-10">
-            <button onclick="hapusDataSistem('router', '${r.mac}')" class="w-full border border-red-500/50 text-red-500 font-bold py-4 rounded-2xl uppercase text-[10px]">🗑️ HAPUS ROUTER PERMANEN</button>
+            <button onclick="hapusDataSistem('router', '${r.ip}')" class="w-full border border-red-500/50 text-red-500 font-bold py-4 rounded-2xl uppercase text-[10px] hover:bg-red-500/10 transition-all">🗑️ HAPUS ROUTER PERMANEN</button>
         </div>
     </div>`;
 }
-
-// --- 5. FUNGSI KIRIM DATA (SUDAH FIX) ---
+// --- LOGIKA KIRIM EDIT KE GS (FIXED UNTUK KUNCI IP) ---
 async function prosesSimpanEdit(type) {
     let payload = { action: type === 'member' ? "edit_member" : "edit_router" };
     
@@ -308,7 +338,12 @@ async function prosesSimpanEdit(type) {
         payload.nominal = document.getElementById('ed-nominal').value;
         payload.aktivasi = document.getElementById('ed-aktivasi').value;
     } else {
-        payload.mac_old = document.getElementById('er-mac-old').value; 
+        // --- PERBAIKAN KRUSIAL DI SINI ---
+        // Karena MAC masih kosong, kita kirim ip_old dari hidden input
+        const ipOldEl = document.getElementById('er-ip-old');
+        payload.ip_old = ipOldEl ? ipOldEl.value : document.getElementById('er-ip').value;
+        
+        // Data baru yang akan ditulis ke baris tersebut
         payload.mac = document.getElementById('er-mac').value;
         payload.ip = document.getElementById('er-ip').value;
         payload.ssid = document.getElementById('er-ssid').value;
@@ -318,20 +353,27 @@ async function prosesSimpanEdit(type) {
     }
 
     document.getElementById('list-render').innerHTML = "<p class='text-center py-10 animate-pulse text-cyan-400 font-bold uppercase text-xs'>Menyimpan Perubahan...</p>";
-
+    
     try {
-        const res = await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
+        const res = await fetch(API_URL, { 
+            method: "POST", 
+            body: JSON.stringify(payload) 
+        });
+        
         const result = await res.json();
+        
         if(result.status === "success") { 
             alert("DATA BERHASIL DIUPDATE!"); 
             await loadData(); 
             closeM(); 
         } else {
             alert("Gagal: " + result.message);
+            // Jika gagal, kembalikan ke daftar awal
             await loadData();
         }
     } catch (e) { 
         alert("Gagal Update! Cek Koneksi."); 
+        console.error(e);
         await loadData();
     }
 }
@@ -388,13 +430,54 @@ async function prosesSimpanEdit(type) {
     }
 
     function renderFormTambah() {
-        document.getElementById('list-render').innerHTML = `<div class="space-y-5 p-2 pb-10"><input type="text" id="in-id" placeholder="ID (CONTOH: P001)" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 uppercase font-bold text-sm text-white"><input type="text" id="in-nama" placeholder="NAMA LENGKAP" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 uppercase font-bold text-sm text-white"><input type="number" id="in-wa" placeholder="WHATSAPP (628...)" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white"><input type="number" id="in-nominal" placeholder="NOMINAL TAGIHAN" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white"><input type="text" id="in-aktivasi" placeholder="TGL AKTIVASI" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white"><button onclick="simpanMemberBaru()" class="w-full bg-cyan-500 text-black font-black py-5 rounded-2xl shadow-lg shadow-cyan-500/30 uppercase mt-4">SIMPAN DATA</button></div>`;
+        document.getElementById('list-render').innerHTML = `<div class="space-y-5 p-2 pb-10"><input type="text" id="in-id" placeholder="PAKET (CONTOH: 1P/2P/3P/4P)" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 uppercase font-bold text-sm text-white"><input type="text" id="in-nama" placeholder="NAMA" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 uppercase font-bold text-sm text-white"><input type="number" id="in-wa" placeholder="WHATSAPP (628...)" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white"><input type="number" id="in-nominal" placeholder="TAGIHAN/BULAN" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white"><input type="text" id="in-aktivasi" placeholder="TGL AKTIVASI" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white"><button onclick="simpanMemberBaru()" class="w-full bg-cyan-500 text-black font-black py-5 rounded-2xl shadow-lg shadow-cyan-500/30 uppercase mt-4">SIMPAN DATA</button></div>`;
     }
 
-    function renderFormGenerate() {
+function renderFormGenerate() {
         const listBulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
         const d = new Date();
-        document.getElementById('list-render').innerHTML = `<div class="space-y-6 p-2 pb-10"><select id="gen-bulan" class="w-full bg-white/10 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white">${listBulan.map(b => `<option value="${b}" ${b === listBulan[d.getMonth()] ? 'selected' : ''} class="bg-slate-900">${b}</option>`).join('')}</select><input type="number" id="gen-tahun" value="${d.getFullYear()}" class="w-full bg-white/10 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white"><button onclick="prosesGenerateMassal()" class="w-full bg-cyan-500 text-black font-black py-5 rounded-2xl uppercase mt-4">MULAI GENERATE</button></div>`;
+        
+        // Tampilan tetap sama dengan kode Abang, hanya tombolnya saya arahkan ke logika baru
+        document.getElementById('list-render').innerHTML = `
+        <div class="space-y-6 p-2 pb-10">
+            <div class="bg-white/5 p-4 rounded-2xl border border-white/10 mb-2">
+                <p class="text-[9px] text-gray-500 uppercase font-bold">Total Antrean Nama</p>
+                <p class="text-lg font-black text-white">${dataMaster.length} Member</p>
+            </div>
+            <select id="gen-bulan" class="w-full bg-white/10 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white">
+                ${listBulan.map(b => `<option value="${b}" ${b === listBulan[d.getMonth()] ? 'selected' : ''} class="bg-slate-900">${b}</option>`).join('')}
+            </select>
+            <input type="number" id="gen-tahun" value="${d.getFullYear()}" class="w-full bg-white/10 border border-white/10 p-5 rounded-2xl outline-none focus:border-cyan-500 font-bold text-sm text-white">
+            <button onclick="prosesGenerateMassalNama()" class="w-full bg-cyan-500 text-black font-black py-5 rounded-2xl uppercase mt-4 shadow-lg shadow-cyan-500/30">MULAI GENERATE</button>
+        </div>`;
+    }
+
+    // Eksekusi Generate (Logika Nama)
+    async function prosesGenerateMassalNama() {
+        const bln = document.getElementById('gen-bulan').value;
+        const thn = document.getElementById('gen-tahun').value;
+        if(!confirm(`Generate tagihan periode ${bln} ${thn} untuk SEMUA NAMA?`)) return;
+
+        document.getElementById('list-render').innerHTML = "<p class='text-center py-20 animate-pulse text-cyan-400 text-xs uppercase font-bold'>GENERATING BY NAME...</p>";
+        
+        try {
+            const res = await fetch(API_URL, { 
+                method: "POST", 
+                body: JSON.stringify({ 
+                    action: "generate", 
+                    bulan: bln, 
+                    tahun: thn,
+                    checkBy: "nama" // Kunci agar GS cek nama, bukan ID
+                }) 
+            });
+            const result = await res.json();
+            alert("BERHASIL: " + result.message);
+            await loadData(); 
+            closeM();
+        } catch (e) { 
+            alert("Error generate!"); 
+            renderFormGenerate(); 
+        }
     }
 
     function renderTagihan(filter, key) {
@@ -776,9 +859,41 @@ function renderRekap() {
         }
     }
 
-    function closeM() { document.getElementById('modal-container').style.display = 'none'; }
-    function logoutSistem() { if(confirm("LOGOUT?")) window.location.reload(); }
-    window.onload = loadData;
+function closeM() { 
+        document.getElementById('modal-container').style.display = 'none'; 
+    }
+
+    // --- LOGIKA LOGIN & LOGOUT BARU ---
+    const PASS_SISTEM = "admin12345";
+
+    function cekLogin() {
+        const input = document.getElementById('pass-admin').value;
+        if(input === PASS_SISTEM) {
+            document.getElementById('login-screen').style.display = 'none'; 
+            sessionStorage.setItem('is_auth', 'true');
+            loadData(); // Data baru ditarik SETELAH login sukses
+        } else {
+            alert("PASSWORD SALAH, AKSES DITOLAK!");
+            document.getElementById('pass-admin').value = "";
+        }
+    }
+
+    function logout() {
+        if(confirm("Yakin ingin keluar dari dashboard?")) {
+            sessionStorage.removeItem('is_auth');
+            location.reload(); 
+        }
+    }
+
+    // Pengganti window.onload = loadData;
+    window.addEventListener('load', () => {
+        if(sessionStorage.getItem('is_auth') === 'true') {
+            document.getElementById('login-screen').style.display = 'none';
+            loadData();
+        } else {
+            document.getElementById('login-screen').style.display = 'flex';
+        }
+    });
 </script>
 </body>
 </html>

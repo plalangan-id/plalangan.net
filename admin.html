@@ -597,10 +597,10 @@ function renderFormGenerate() {
             if (!u || !p) return alert("Isi User & Pass!");
             akses = `User: ${u} | Pass: ${p}`;
         }
-        const msg = `Halo *${nama}*, Terima kasih telah berlangganan di *PLALANGAN.NET*%0A%0A` +
-                    `Berikut akses internet Anda:%0A` +
+        const msg = `*PLALANGAN.NET*%0A%0A` +
+                    `Gunakan mac: PONSEL / PERANGKAT:%0A` +
                     `Paket: *${tipe}*%0A` +
-                    `Akses: *${akses}*%0A%0A` +
+                    `Kode : *${akses}*%0A%0A` +
                     `_Berlaku s/d: ${new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString('id-ID')}_`;
         window.open(`https://api.whatsapp.com/send?phone=${wa}&text=${msg}`, '_blank');
         closeM();

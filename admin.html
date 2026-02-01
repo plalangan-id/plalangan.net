@@ -597,9 +597,8 @@ function renderFormGenerate() {
             if (!u || !p) return alert("Isi User & Pass!");
             akses = `User: ${u} | Pass: ${p}`;
         }
-        const msg = `*LOGIN*%0A%0A` +
-                    `_Gunakan mac: PONSEL / PERANGKAT:_%0A` +
-                    `Paket: *${tipe}*%0A` +
+        const msg = `Sebelum *LOGIN*%0A%0A`
+                    `_Gunakan mac: PONSEL / PERANGKAT:_%0A` +                    
                     `Kode : *${akses}*%0A%0A` +
                     `_Berlaku s/d: ${new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString('id-ID')}_`;
         window.open(`https://api.whatsapp.com/send?phone=${wa}&text=${msg}`, '_blank');

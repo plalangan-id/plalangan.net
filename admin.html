@@ -597,7 +597,7 @@ function renderFormGenerate() {
             if (!u || !p) return alert("Isi User & Pass!");
             akses = `User: ${u} | Pass: ${p}`;
         }
-        const msg = `Sebelum *LOGIN*%0A%0A`
+        const msg = `Sebelum *LOGIN*%0A%0A` +
                     `_Gunakan mac: PONSEL / PERANGKAT:_%0A` +                    
                     `Kode : *${akses}*%0A%0A` +
                     `_Berlaku s/d: ${new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString('id-ID')}_`;
